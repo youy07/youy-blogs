@@ -1,6 +1,6 @@
 AUTHOR = 'youy'
 SITENAME = '悠游AI'
-SITEURL = "http://localhost:8000"
+SITEURL = "https://youy-blogs.netlify.app/"
 
 PATH = "content"
 
