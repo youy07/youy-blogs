@@ -1,0 +1,12 @@
+[build]
+  command = "pelican content -s publishconf.py"
+  publish = "output"
+
+[build.environment]
+  PYTHON_VERSION = "3.11"
+  
+# 解决伪静态URL 404（不带.html路径）
+[[redirects]]
+from = "/*"
+to = "/:splat/index.html"
+status = 200
