@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block title %}标签 — {{ SITENAME }}{% endblock %}
+{% block content %}
+<section class="tags">
+  <h1>标签</h1>
+  <div class="tag-cloud">
+    {% for tag, articles in tags|sort %}
+    <a class="tag" href="{{ SITEURL }}/{{ tag.url }}" style="font-size: {{ 80 + (articles|count * 20) }}%">{{ tag }} ({{ articles|count }})</a>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}

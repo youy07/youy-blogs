@@ -1,0 +1,62 @@
+<div class="sidebar-inner">
+  <section class="widget">
+    <h3 class="widget-title">近期文章</h3>
+    <ul class="widget-list">
+      {% for article in articles[:5] %}
+      <li><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="widget">
+    <h3 class="widget-title">分类</h3>
+    <ul class="widget-list">
+      {% for category, articles in categories|sort %}
+      <li><a href="{{ SITEURL }}/{{ category.url }}">{{ category }}</a> ({{ articles|count }})</li>
+      {% endfor %}
+    </ul>
+  </section>
+
+  <section class="widget">
+    <h3 class="widget-title">标签</h3>
+    <div class="widget-tags">
+      {% for tag, articles in tags[:20] %}
+      <a class="tag" href="{{ SITEURL }}/{{ tag.url }}">{{ tag }}</a>
+      {% endfor %}
+    </div>
+  </section>
+
+  {% if LINKS %}
+  <section class="widget">
+    <h3 class="widget-title">友情链接</h3>
+    <ul class="widget-list">
+      {% for name, link in LINKS %}
+      <li><a href="{{ link }}" target="_blank" rel="noopener">{{ name }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  {% if SOCIAL %}
+  <section class="widget">
+    <h3 class="widget-title">社交</h3>
+    <ul class="widget-list">
+      {% for name, link in SOCIAL %}
+      <li><a href="{{ link }}" target="_blank" rel="noopener">{{ name }}</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <section class="widget">
+    <h3 class="widget-title">订阅</h3>
+    <ul class="widget-list">
+      {% if FEED_ALL_ATOM %}
+      <li><a href="{{ FEED_ALL_ATOM }}" target="_blank" rel="noopener">Atom</a></li>
+      {% endif %}
+      {% if FEED_ALL_RSS %}
+      <li><a href="{{ FEED_ALL_RSS }}" target="_blank" rel="noopener">RSS</a></li>
+      {% endif %}
+    </ul>
+  </section>
+</div>

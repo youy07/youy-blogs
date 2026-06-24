@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG }}">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+  {% if article %}
+    <meta name="description" content="{{ article.summary | striptags | truncate(200) }}" />
+    <meta name="keywords" content="{{ article.tags | join(', ') }}" />
+  {% else %}
+    <meta name="description" content="{% block description %}{{ SITEDESCRIPTION }}{% endblock %}">
+  {% endif %}
+  <!-- Open Graph （社交媒体分享卡片） -->
+	<meta property="og:site_name" content="{{ SITENAME }}" />
+	{% if article %}
+		<meta property="og:title" content="{{ article.title }}" />
+		<meta property="og:type" content="article" />
+		<meta property="og:url" content="{{ SITEURL }}/{{ article.url }}" />
+		<meta property="og:description"
+		  content="{{ article.summary | striptags | truncate(200) }}" />
+	{% endif %}
+
+	<!-- Twitter Card -->
+	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:title" content="{{ article.title if article else SITENAME }}" />
+
+  <link rel="stylesheet" href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/main.css">
+  {% if FEED_ALL_ATOM %}
+  <link rel="alternate" type="application/atom+xml" title="{{ SITENAME }} — Full Atom Feed" href="{{ FEED_ALL_ATOM }}">
+  {% endif %}
+  {% if FEED_ALL_RSS %}
+  <link rel="alternate" type="application/rss+xml" title="{{ SITENAME }} — Full RSS Feed" href="{{ FEED_ALL_RSS }}">
+  {% endif %}
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  <header class="site-header">
+    <div class="container">
+      <h1 class="site-title"><a href="{{ SITEURL }}/">{{ SITENAME }}</a></h1>
+      {% if SITESUBTITLE %}
+      <p class="site-subtitle">{{ SITESUBTITLE }}</p>
+      {% endif %}
+      <nav class="site-nav">
+        <ul>
+          <li><a href="{{ SITEURL }}/">首页</a></li>
+          {% if DISPLAY_PAGES_ON_MENU %}
+          {% for pg in pages %}
+          <li><a href="{{ SITEURL }}/{{ pg.url }}">{{ pg.title }}</a></li>
+          {% endfor %}
+          {% endif %}
+          <!-- <li><a href="{{ SITEURL }}/archives.html">归档</a></li> -->
+          <!-- <li><a href="{{ SITEURL }}/categories.html">分类</a></li> -->
+          <!-- <li><a href="{{ SITEURL }}/tags.html">标签</a></li> -->
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main class="site-content">
+    <div class="container content-wrapper">
+      <div class="content-main">
+        {% block content %}{% endblock %}
+      </div>
+      <aside class="sidebar">
+        {% include "sidebar.html" %}
+      </aside>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <p>&copy; {{ SITENAME }} {% if articles %}{{ articles[0].date.strftime('%Y') }}{% endif %}. Powered by <a href="https://getpelican.com/">Pelican</a>.</p>
+    </div>
+  </footer>
+</body>
+</html>
