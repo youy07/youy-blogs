@@ -1,6 +1,6 @@
 AUTHOR = 'youy'
 SITENAME = '悠游AI'
-SITEURL = "https://youy-blogs.netlify.app"
+SITEURL = "http://localhost:8000"
 
 PATH = "content"
 
@@ -11,7 +11,7 @@ DEFAULT_LANG = 'Chinese (Simplified)'
 THEME = 'themes/theme'
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['sitemap', 'neighbors', 'related_posts']
+PLUGINS = ['sitemap', 'series','neighbors', 'related_posts']
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
