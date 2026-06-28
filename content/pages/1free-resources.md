@@ -10,8 +10,7 @@ Slug: contact
   >
   > 提取码：zbcs
   
-- [python办公自动化入门](https://pan.baidu.com/s/1SRbqfmYrZKOjgXHM59kLPQ)
-  
-  > 描述：理论+实操，20节课快速入门python办公自动化,无废话最短学习路径
+- [中学作文冲刺](https://pan.baidu.com/s/1sZcFr9SBASsJwA0u7jesrg?pwd=49db)
+  > 描述：理论+实操，作文冲刺 中考一类文 20天见成效
   >
-  > 提取码：zbcs
+  > 提取码：49db
