@@ -14,3 +14,8 @@ Slug: contact
   > 描述：理论+实操，作文冲刺 中考一类文 20天见成效
   >
   > 提取码：49db
+  
+- [中学语文阅读冲刺](https://pan.baidu.com/s/1NGlRFOtC-EjZlcMFmS4nsw?pwd=ecw6)
+  > 描述：理论+实操，中考阅读满分30课 30天见成效
+  >
+  > 提取码：ecw6
