@@ -43,6 +43,15 @@
       <nav class="site-nav">
         <ul>
           <li><a href="{{ SITEURL }}/">首页</a></li>
+		  <ul>
+			{% if MAIN_MENU %}
+				{% for title, url in MENUITEMS %}
+				<li>
+				  <a href="{{ url }}">{{ title }}</a>
+				</li>
+				{% endfor %}
+			{% endif %}
+		  </ul>
           {% if DISPLAY_PAGES_ON_MENU %}
           {% for pg in pages %}
           <li><a href="{{ SITEURL }}/{{ pg.url }}">{{ pg.title }}</a></li>

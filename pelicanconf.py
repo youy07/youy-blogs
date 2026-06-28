@@ -22,7 +22,7 @@ AUTHOR_FEED_RSS = None
 
 # Blogroll
 LINKS = [
-    ("Pelican", "https://getpelican.com/"),
+    ("我的小店", "https://m.tb.cn/h.RsjkdfC?tk=DcsDgiJeKN6/"),
     ("Python.org", "https://www.python.org/"),
     ("Jinja2", "https://palletsprojects.com/p/jinja/"),
     ("You can modify those links in your config file", "#"),
@@ -40,13 +40,16 @@ DEFAULT_PAGINATION = 10
 # RELATIVE_URLS = True
 
 # ===== 静态文件 =====
-STATIC_PATHS = ['images']
+STATIC_PATHS = ['images', 'static']
+ARTICLE_EXCLUDES = ['static']         # 排除文章处理
+PAGE_EXCLUDES = ['static']            # 排除页面处理
 
 # ===== 自定义菜单 =====
+MAIN_MENU = False
 MENUITEMS = [
-    ('首页', '/'),
-    ('归档', '/archives.html'),
-    ('关于', '/pages/about.html'),
+    ('打字挑战', '/static/typing-challenge.html'),
+    # ('归档', '/archives.html'),
+    # ('关于', '/pages/about.html'),
 ]
 
 SITEMAP = {
