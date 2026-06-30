@@ -1,7 +1,7 @@
 ---
 Title: Python安装与环境搭建
 Date: 2026-06-24
-Category: python入门
+Category: python
 Tags: python
 Series: python入门
 Series_index: 1
@@ -247,5 +247,3 @@ pip install requests
 - **"python不是内部命令"**：没有勾选PATH，重新安装
 - **pip装不上**：尝试 `python -m pip install xxx`
 - **VS Code不识别Python**：检查是否安装了Python扩展
-
-[🏠 课程首页](../MISSION.md)[第一课：Hello Python →](0001-hello-python.html)

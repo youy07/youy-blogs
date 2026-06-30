@@ -1,0 +1,562 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>元素周期表 - 在线交互式化学元素查询工具</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: #f0f4f8; color: #1e293b;
+  min-height: 100vh; padding: 16px; display: flex; justify-content: center;
+}
+.container { max-width: 1200px; width: 100%; }
+
+/* ===== 标题 ===== */
+.header { text-align: center; margin-bottom: 16px; }
+.header h1 { font-size: clamp(1.4rem, 3vw, 1.8rem); font-weight: 800; color: #0f172a; letter-spacing: 1px; }
+.header .sub { font-size: 0.8rem; color: #94a3b8; margin-top: 2px; }
+
+/* ===== 工具栏 ===== */
+.toolbar {
+  display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-bottom: 14px;
+  align-items: center;
+}
+.toolbar .heatmap-group { display: flex; gap: 4px; flex-wrap: wrap; }
+.toolbar button {
+  padding: 6px 14px; border: 1px solid #e2e8f0; border-radius: 6px;
+  background: #fff; color: #64748b; font-size: 0.8rem; cursor: pointer;
+  transition: 0.15s; white-space: nowrap;
+}
+.toolbar button:hover { border-color: #7c3aed; background: #f5f3ff; color: #6d28d9; }
+.toolbar button.active { border-color: #7c3aed; background: #7c3aed; color: #fff; }
+.toolbar .sep { width: 1px; height: 24px; background: #e2e8f0; margin: 0 4px; }
+
+/* ===== 分类标签 ===== */
+.categories { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-bottom: 14px; }
+.cat-btn {
+  padding: 4px 12px; border-radius: 12px; border: 1px solid #e2e8f0;
+  background: #fff; color: #64748b; font-size: 0.75rem; cursor: pointer;
+  transition: 0.15s;
+}
+.cat-btn:hover { border-color: #7c3aed; color: #6d28d9; }
+.cat-btn.active { border-color: #7c3aed; color: #7c3aed; background: #f5f3ff; }
+
+/* ===== 周期表网格 ===== */
+.table-wrap {
+  background: #fff; border-radius: 12px; padding: 10px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06); overflow-x: auto;
+  border: 1px solid #eef2f6;
+}
+.ptable {
+  display: grid;
+  grid-template-columns: 32px repeat(18, minmax(48px, 1fr));
+  gap: 2px; min-width: 600px;
+}
+.ptable .label-cell {
+  display: flex; align-items: center; justify-content: center;
+  font-size: 0.7rem; color: #666;
+}
+.ptable .elem {
+  position: relative; border-radius: 4px; padding: 2px 1px;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  cursor: pointer; transition: 0.15s; min-height: 52px;
+  border: 1px solid transparent;
+}
+.ptable .elem:hover { transform: scale(1.12); z-index: 5; box-shadow: 0 0 12px rgba(0,0,0,0.1); border-color: rgba(0,0,0,0.15); }
+.ptable .elem .z { font-size: 0.55rem; opacity: 0.6; line-height: 1; }
+.ptable .elem .sym { font-size: 0.85rem; font-weight: 700; line-height: 1.2; }
+.ptable .elem .name { font-size: 0.5rem; opacity: 0.7; line-height: 1; white-space: nowrap; }
+.ptable .elem .mass { font-size: 0.45rem; opacity: 0.4; line-height: 1; }
+
+/* Empty placeholder cells in periods 1 and 6/7 */
+.ptable .empty-cell { background: transparent; pointer-events: none; }
+
+/* ===== 详情面板 ===== */
+.detail-overlay {
+  display: none; position: fixed; inset: 0; background: rgba(15,23,42,0.45);
+  justify-content: center; align-items: center; z-index: 100; padding: 20px;
+  backdrop-filter: blur(4px);
+}
+.detail-overlay.show { display: flex; }
+.detail-card {
+  background: #fff; border-radius: 16px; padding: 28px 32px;
+  max-width: 460px; width: 100%; max-height: 85vh; overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+  animation: popIn 0.25s ease-out;
+}
+@keyframes popIn { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+.detail-card .close {
+  float: right; background: none; border: none; color: #94a3b8;
+  font-size: 1.2rem; cursor: pointer; padding: 4px;
+}
+.detail-card .close:hover { color: #1e293b; }
+.detail-card .d-symbol { font-size: 2.2rem; font-weight: 800; }
+.detail-card .d-name { font-size: 1rem; color: #475569; margin-bottom: 4px; }
+.detail-card .d-sub { font-size: 0.8rem; color: #94a3b8; margin-bottom: 14px; }
+.detail-card .d-prop { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f1f5f9; font-size: 0.85rem; }
+.detail-card .d-prop .key { color: #94a3b8; }
+.detail-card .d-prop .val { color: #1e293b; text-align: right; }
+
+/* ===== 图例 ===== */
+.legend { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 12px; }
+.legend-item { display: flex; align-items: center; gap: 4px; font-size: 0.7rem; color: #64748b; }
+.legend-item .swatch { width: 12px; height: 12px; border-radius: 2px; flex-shrink: 0; }
+
+/* ===== 响应式 ===== */
+@media (max-width: 760px) {
+  .ptable { grid-template-columns: 24px repeat(18, minmax(36px, 1fr)); gap: 1px; min-width: auto; }
+  .ptable .elem { min-height: 40px; padding: 1px; }
+  .ptable .elem .sym { font-size: 0.7rem; }
+  .ptable .elem .z { font-size: 0.45rem; }
+  .ptable .elem .name { font-size: 0.4rem; }
+  .ptable .elem .mass { display: none; }
+  .detail-card { padding: 20px; }
+  body { padding: 10px 6px; }
+}
+@media (max-width: 500px) {
+  .ptable .elem .name { display: none; }
+}
+</style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <h1>⚛ <span id="titleText">元素周期表</span></h1>
+    <div class="sub" id="titleSub">118 种化学元素 · 点击查看详情</div>
+  </div>
+
+  <!-- 工具栏 -->
+  <div class="toolbar" id="toolbar">
+    <button class="active" data-heat="none" id="heatNone">📊 标准</button>
+    <span class="sep"></span>
+    <div class="heatmap-group">
+      <button data-heat="radius">原子半径</button>
+      <button data-heat="en">电负性</button>
+      <button data-heat="ie">电离能</button>
+      <button data-heat="mp">熔点</button>
+      <button data-heat="bp">沸点</button>
+    </div>
+    <span class="sep"></span>
+    <button id="langToggle">EN</button>
+  </div>
+
+  <!-- 分类筛选 -->
+  <div class="categories" id="categories"></div>
+
+  <!-- 周期表 -->
+  <div class="table-wrap">
+    <div class="ptable" id="ptable"></div>
+    <div class="legend" id="legend"></div>
+  </div>
+
+  <!-- 详情弹窗 -->
+  <div class="detail-overlay" id="detailOverlay">
+    <div class="detail-card" id="detailCard">
+      <button class="close" id="detailClose">✕</button>
+      <div class="d-symbol" id="dSym">H</div>
+      <div class="d-name" id="dName">氢 / Hydrogen</div>
+      <div class="d-sub" id="dSub">1s¹ · 非金属</div>
+      <div id="dProps"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+// ================================================================
+//  元素周期表 — 完整 118 元素数据
+// ================================================================
+
+// [Z, symbol, cn, en, period, group, category, mass, density(g/cm³), radius(pm), en, ie(eV), mp(K), bp(K), config]
+// category: 0-非金属 1-稀有气体 2-碱金属 3-碱土金属 4-类金属 5-卤素 6-其他金属 7-过渡金属 8-镧系 9-锕系 10-未知
+const ELEMENTS = [
+  [1,'H','氢','Hydrogen',1,1,0,1.008,0.0000899,53,2.20,13.598,14.01,20.28,'1s¹'],
+  [2,'He','氦','Helium',1,18,1,4.003,0.0001785,31,null,24.587,null,4.22,'1s²'],
+  [3,'Li','锂','Lithium',2,1,2,6.941,0.534,167,0.98,5.392,453.65,1615,'[He] 2s¹'],
+  [4,'Be','铍','Beryllium',2,2,3,9.012,1.848,112,1.57,9.322,1560,2742,'[He] 2s²'],
+  [5,'B','硼','Boron',2,13,4,10.81,2.34,87,2.04,8.298,2348,4273,'[He] 2s² 2p¹'],
+  [6,'C','碳','Carbon',2,14,0,12.011,2.267,67,2.55,11.26,3823,4098,'[He] 2s² 2p²'],
+  [7,'N','氮','Nitrogen',2,15,0,14.007,0.00125,56,3.04,14.534,63.15,77.36,'[He] 2s² 2p³'],
+  [8,'O','氧','Oxygen',2,16,0,15.999,0.00143,48,3.44,13.618,54.36,90.2,'[He] 2s² 2p⁴'],
+  [9,'F','氟','Fluorine',2,17,5,18.998,0.0017,42,3.98,17.422,53.53,85.03,'[He] 2s² 2p⁵'],
+  [10,'Ne','氖','Neon',2,18,1,20.180,0.0009,38,null,21.564,24.56,27.07,'[He] 2s² 2p⁶'],
+  [11,'Na','钠','Sodium',3,1,2,22.990,0.971,190,0.93,5.139,370.87,1156,'[Ne] 3s¹'],
+  [12,'Mg','镁','Magnesium',3,2,3,24.305,1.738,145,1.31,7.646,923,1363,'[Ne] 3s²'],
+  [13,'Al','铝','Aluminium',3,13,6,26.982,2.698,118,1.61,5.986,933.4,2792,'[Ne] 3s² 3p¹'],
+  [14,'Si','硅','Silicon',3,14,4,28.086,2.33,111,1.9,8.151,1687,3538,'[Ne] 3s² 3p²'],
+  [15,'P','磷','Phosphorus',3,15,0,30.974,1.82,98,2.19,10.486,317.3,553.6,'[Ne] 3s² 3p³'],
+  [16,'S','硫','Sulfur',3,16,0,32.065,2.067,88,2.58,10.36,388.36,717.75,'[Ne] 3s² 3p⁴'],
+  [17,'Cl','氯','Chlorine',3,17,5,35.453,0.00321,79,3.16,12.967,172.17,239.11,'[Ne] 3s² 3p⁵'],
+  [18,'Ar','氩','Argon',3,18,1,39.948,0.00178,71,null,15.759,83.8,87.3,'[Ne] 3s² 3p⁶'],
+  [19,'K','钾','Potassium',4,1,2,39.098,0.862,243,0.82,4.34,336.5,1032,'[Ar] 4s¹'],
+  [20,'Ca','钙','Calcium',4,2,3,40.078,1.55,194,1.0,6.113,1115,1757,'[Ar] 4s²'],
+  [21,'Sc','钪','Scandium',4,3,7,44.956,2.985,184,1.36,6.561,1814,3109,'[Ar] 3d¹ 4s²'],
+  [22,'Ti','钛','Titanium',4,4,7,47.867,4.506,147,1.54,6.828,1941,3560,'[Ar] 3d² 4s²'],
+  [23,'V','钒','Vanadium',4,5,7,50.941,6.0,135,1.63,6.746,2183,3680,'[Ar] 3d³ 4s²'],
+  [24,'Cr','铬','Chromium',4,6,7,51.996,7.19,129,1.66,6.766,2180,2944,'[Ar] 3d⁵ 4s¹'],
+  [25,'Mn','锰','Manganese',4,7,7,54.938,7.44,127,1.55,7.434,1519,2334,'[Ar] 3d⁵ 4s²'],
+  [26,'Fe','铁','Iron',4,8,7,55.845,7.874,126,1.83,7.902,1811,3134,'[Ar] 3d⁶ 4s²'],
+  [27,'Co','钴','Cobalt',4,9,7,58.933,8.9,125,1.88,7.881,1768,3200,'[Ar] 3d⁷ 4s²'],
+  [28,'Ni','镍','Nickel',4,10,7,58.693,8.912,124,1.91,7.64,1728,3186,'[Ar] 3d⁸ 4s²'],
+  [29,'Cu','铜','Copper',4,11,7,63.546,8.96,128,1.9,7.726,1357.77,2835,'[Ar] 3d¹⁰ 4s¹'],
+  [30,'Zn','锌','Zinc',4,12,7,65.38,7.134,134,1.65,9.394,692.68,1180,'[Ar] 3d¹⁰ 4s²'],
+  [31,'Ga','镓','Gallium',4,13,6,69.723,5.907,122,1.81,5.999,302.91,2477,'[Ar] 3d¹⁰ 4s² 4p¹'],
+  [32,'Ge','锗','Germanium',4,14,4,72.63,5.323,122,2.01,7.9,1211.4,3106,'[Ar] 3d¹⁰ 4s² 4p²'],
+  [33,'As','砷','Arsenic',4,15,4,74.922,5.776,121,2.18,9.815,1090,887,'[Ar] 3d¹⁰ 4s² 4p³'],
+  [34,'Se','硒','Selenium',4,16,0,78.971,4.809,116,2.55,9.752,494,958,'[Ar] 3d¹⁰ 4s² 4p⁴'],
+  [35,'Br','溴','Bromine',4,17,5,79.904,3.12,114,2.96,11.814,265.95,332.0,'[Ar] 3d¹⁰ 4s² 4p⁵'],
+  [36,'Kr','氪','Krypton',4,18,1,83.798,0.00375,112,null,13.999,115.78,119.93,'[Ar] 3d¹⁰ 4s² 4p⁶'],
+  [37,'Rb','铷','Rubidium',5,1,2,85.468,1.532,265,0.82,4.177,312.46,961,'[Kr] 5s¹'],
+  [38,'Sr','锶','Strontium',5,2,3,87.62,2.64,219,0.95,5.695,1050,1655,'[Kr] 5s²'],
+  [39,'Y','钇','Yttrium',5,3,7,88.906,4.472,212,1.22,6.217,1799,3609,'[Kr] 4d¹ 5s²'],
+  [40,'Zr','锆','Zirconium',5,4,7,91.224,6.506,160,1.33,6.634,2128,4682,'[Kr] 4d² 5s²'],
+  [41,'Nb','铌','Niobium',5,5,7,92.906,8.57,143,1.6,6.759,2750,5017,'[Kr] 4d⁴ 5s¹'],
+  [42,'Mo','钼','Molybdenum',5,6,7,95.95,10.22,139,2.16,7.092,2896,4912,'[Kr] 4d⁵ 5s¹'],
+  [43,'Tc','锝','Technetium',5,7,7,98.0,11.5,136,1.9,7.28,2430,4538,'[Kr] 4d⁵ 5s²'],
+  [44,'Ru','钌','Ruthenium',5,8,7,101.07,12.37,134,2.2,7.361,2607,4423,'[Kr] 4d⁷ 5s¹'],
+  [45,'Rh','铑','Rhodium',5,9,7,102.91,12.45,134,2.28,7.459,2237,3968,'[Kr] 4d⁸ 5s¹'],
+  [46,'Pd','钯','Palladium',5,10,7,106.42,12.02,137,2.2,8.337,1828.05,3236,'[Kr] 4d¹⁰'],
+  [47,'Ag','银','Silver',5,11,7,107.87,10.49,144,1.93,7.576,1234.93,2435,'[Kr] 4d¹⁰ 5s¹'],
+  [48,'Cd','镉','Cadmium',5,12,7,112.41,8.69,151,1.69,8.994,594.22,1040,'[Kr] 4d¹⁰ 5s²'],
+  [49,'In','铟','Indium',5,13,6,114.82,7.31,167,1.78,5.786,429.75,2345,'[Kr] 4d¹⁰ 5s² 5p¹'],
+  [50,'Sn','锡','Tin',5,14,6,118.71,7.287,140,1.96,7.344,505.08,2875,'[Kr] 4d¹⁰ 5s² 5p²'],
+  [51,'Sb','锑','Antimony',5,15,4,121.76,6.685,133,2.05,8.641,903.78,1860,'[Kr] 4d¹⁰ 5s² 5p³'],
+  [52,'Te','碲','Tellurium',5,16,4,127.6,6.232,123,2.1,9.01,722.66,1261,'[Kr] 4d¹⁰ 5s² 5p⁴'],
+  [53,'I','碘','Iodine',5,17,5,126.9,4.93,115,2.66,10.451,386.85,457.4,'[Kr] 4d¹⁰ 5s² 5p⁵'],
+  [54,'Xe','氙','Xenon',5,18,1,131.29,0.0059,108,null,12.13,161.36,165.03,'[Kr] 4d¹⁰ 5s² 5p⁶'],
+  [55,'Cs','铯','Caesium',6,1,2,132.91,1.873,298,0.79,3.894,301.7,944,'[Xe] 6s¹'],
+  [56,'Ba','钡','Barium',6,2,3,137.33,3.594,253,0.89,5.212,1000,2170,'[Xe] 6s²'],
+  [57,'La','镧','Lanthanum',8,3,8,138.91,6.145,162,1.1,5.577,1193,3737,'[Xe] 5d¹ 6s²'],
+  [58,'Ce','铈','Cerium',8,4,8,140.12,6.77,143,1.12,5.539,1068,3716,'[Xe] 4f¹ 5d¹ 6s²'],
+  [59,'Pr','镨','Praseodymium',8,5,8,140.91,6.773,147,1.13,5.473,1208,3403,'[Xe] 4f³ 6s²'],
+  [60,'Nd','钕','Neodymium',8,6,8,144.24,7.007,206,1.14,5.525,1297,3347,'[Xe] 4f⁴ 6s²'],
+  [61,'Pm','钷','Promethium',8,7,8,145.0,7.26,205,1.13,5.582,1315,3273,'[Xe] 4f⁵ 6s²'],
+  [62,'Sm','钐','Samarium',8,8,8,150.36,7.52,166,1.17,5.644,1345,2067,'[Xe] 4f⁶ 6s²'],
+  [63,'Eu','铕','Europium',8,9,8,151.96,5.243,185,1.2,5.67,1099,1802,'[Xe] 4f⁷ 6s²'],
+  [64,'Gd','钆','Gadolinium',8,10,8,157.25,7.895,141,1.2,6.15,1585,3273,'[Xe] 4f⁷ 5d¹ 6s²'],
+  [65,'Tb','铽','Terbium',8,11,8,158.93,8.23,136,1.1,5.864,1629,3396,'[Xe] 4f⁹ 6s²'],
+  [66,'Dy','镝','Dysprosium',8,12,8,162.5,8.536,121,1.22,5.939,1680,2842,'[Xe] 4f¹⁰ 6s²'],
+  [67,'Ho','钬','Holmium',8,13,8,164.93,8.795,114,1.23,6.022,1734,2993,'[Xe] 4f¹¹ 6s²'],
+  [68,'Er','铒','Erbium',8,14,8,167.26,9.066,104,1.24,6.108,1802,3141,'[Xe] 4f¹² 6s²'],
+  [69,'Tm','铥','Thulium',8,15,8,168.93,9.321,114,1.25,6.184,1818,2223,'[Xe] 4f¹³ 6s²'],
+  [70,'Yb','镱','Ytterbium',8,16,8,173.04,6.965,121,1.1,6.254,1097,1469,'[Xe] 4f¹⁴ 6s²'],
+  [71,'Lu','镥','Lutetium',8,17,8,174.97,9.84,107,1.27,5.426,1925,3675,'[Xe] 4f¹⁴ 5d¹ 6s²'],
+  [72,'Hf','铪','Hafnium',6,4,7,178.49,13.31,144,1.3,6.825,2506,4876,'[Xe] 4f¹⁴ 5d² 6s²'],
+  [73,'Ta','钽','Tantalum',6,5,7,180.95,16.654,134,1.5,7.89,3290,5731,'[Xe] 4f¹⁴ 5d³ 6s²'],
+  [74,'W','钨','Tungsten',6,6,7,183.84,19.25,130,2.36,7.864,3695,5828,'[Xe] 4f¹⁴ 5d⁴ 6s²'],
+  [75,'Re','铼','Rhenium',6,7,7,186.21,21.02,128,1.9,7.833,3459,5869,'[Xe] 4f¹⁴ 5d⁵ 6s²'],
+  [76,'Os','锇','Osmium',6,8,7,190.23,22.61,126,2.2,8.438,3306,5285,'[Xe] 4f¹⁴ 5d⁶ 6s²'],
+  [77,'Ir','铱','Iridium',6,9,7,192.22,22.56,127,2.2,8.967,2719,4403,'[Xe] 4f¹⁴ 5d⁷ 6s²'],
+  [78,'Pt','铂','Platinum',6,10,7,195.08,21.46,130,2.28,8.958,2041.4,4098,'[Xe] 4f¹⁴ 5d⁹ 6s¹'],
+  [79,'Au','金','Gold',6,11,7,196.97,19.32,134,2.54,9.226,1337.33,3129,'[Xe] 4f¹⁴ 5d¹⁰ 6s¹'],
+  [80,'Hg','汞','Mercury',6,12,7,200.59,13.534,151,2.0,10.437,234.32,629.88,'[Xe] 4f¹⁴ 5d¹⁰ 6s²'],
+  [81,'Tl','铊','Thallium',6,13,6,204.38,11.85,156,1.62,6.108,577,1746,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p¹'],
+  [82,'Pb','铅','Lead',6,14,6,207.2,11.34,154,2.33,7.417,600.61,2022,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p²'],
+  [83,'Bi','铋','Bismuth',6,15,6,208.98,9.78,143,2.02,7.289,544.55,1837,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p³'],
+  [84,'Po','钋','Polonium',6,16,6,209.0,9.32,135,2.0,8.414,527,1235,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁴'],
+  [85,'At','砹','Astatine',6,17,5,210.0,8.91,127,2.2,9.318,575,610,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁵'],
+  [86,'Rn','氡','Radon',6,18,1,222.0,0.00973,120,null,10.748,202,211.3,'[Xe] 4f¹⁴ 5d¹⁰ 6s² 6p⁶'],
+  [87,'Fr','钫','Francium',7,1,2,223.0,1.87,null,0.71,4.073,300,950,'[Rn] 7s¹'],
+  [88,'Ra','镭','Radium',7,2,3,226.0,5.5,215,0.9,5.279,973,2010,'[Rn] 7s²'],
+  [89,'Ac','锕','Actinium',9,3,9,227.0,10.07,188,1.1,5.17,1323,3473,'[Rn] 6d¹ 7s²'],
+  [90,'Th','钍','Thorium',9,4,9,232.04,11.72,175,1.3,6.306,2023,5061,'[Rn] 6d² 7s²'],
+  [91,'Pa','镤','Protactinium',9,5,9,231.04,15.37,169,1.5,5.89,1845,4273,'[Rn] 5f² 6d¹ 7s²'],
+  [92,'U','铀','Uranium',9,6,9,238.03,18.95,175,1.38,6.194,1405,4404,'[Rn] 5f³ 6d¹ 7s²'],
+  [93,'Np','镎','Neptunium',9,7,9,237.0,20.45,173,1.36,6.266,917,4175,'[Rn] 5f⁴ 6d¹ 7s²'],
+  [94,'Pu','钚','Plutonium',9,8,9,244.0,19.84,172,1.28,6.026,913,3501,'[Rn] 5f⁶ 7s²'],
+  [95,'Am','镅','Americium',9,9,9,243.0,13.69,173,1.3,5.993,1449,2880,'[Rn] 5f⁷ 7s²'],
+  [96,'Cm','锔','Curium',9,10,9,247.0,13.51,174,1.3,5.991,1618,3383,'[Rn] 5f⁷ 6d¹ 7s²'],
+  [97,'Bk','锫','Berkelium',9,11,9,247.0,14.78,170,1.3,6.197,1259,2900,'[Rn] 5f⁹ 7s²'],
+  [98,'Cf','锎','Californium',9,12,9,251.0,15.1,186,1.3,6.281,1173,1743,'[Rn] 5f¹⁰ 7s²'],
+  [99,'Es','锿','Einsteinium',9,13,9,252.0,13.5,186,1.3,6.42,1133,1269,'[Rn] 5f¹¹ 7s²'],
+  [100,'Fm','镄','Fermium',9,14,9,257.0,9.7,null,1.3,6.5,1125,null,'[Rn] 5f¹² 7s²'],
+  [101,'Md','钔','Mendelevium',9,15,9,258.0,10.3,null,1.3,6.58,1100,null,'[Rn] 5f¹³ 7s²'],
+  [102,'No','锘','Nobelium',9,16,9,259.0,9.9,null,1.3,6.65,1100,null,'[Rn] 5f¹⁴ 7s²'],
+  [103,'Lr','铹','Lawrencium',9,17,9,266.0,15.6,null,1.3,4.9,1900,null,'[Rn] 5f¹⁴ 7s² 7p¹'],
+  [104,'Rf','𬬻','Rutherfordium',7,4,7,267.0,23.2,null,null,6.0,2400,5800,'[Rn] 5f¹⁴ 6d² 7s²'],
+  [105,'Db','𬭊','Dubnium',7,5,7,268.0,29.3,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d³ 7s²'],
+  [106,'Sg','𬭳','Seaborgium',7,6,7,269.0,35.0,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d⁴ 7s²'],
+  [107,'Bh','𬭛','Bohrium',7,7,7,270.0,37.1,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d⁵ 7s²'],
+  [108,'Hs','𬭶','Hassium',7,8,7,277.0,40.7,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d⁶ 7s²'],
+  [109,'Mt','鿏','Meitnerium',7,9,7,278.0,37.4,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d⁷ 7s²'],
+  [110,'Ds','𬭬','Darmstadtium',7,10,7,281.0,34.8,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d⁸ 7s²'],
+  [111,'Rg','𬬭','Roentgenium',7,11,7,282.0,28.7,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d⁹ 7s²'],
+  [112,'Cn','鎶','Copernicium',7,12,7,285.0,23.7,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s²'],
+  [113,'Nh','鉨','Nihonium',7,13,6,286.0,16.0,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p¹'],
+  [114,'Fl','𫓧','Flerovium',7,14,6,289.0,14.0,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p²'],
+  [115,'Mc','镆','Moscovium',7,15,6,290.0,13.5,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p³'],
+  [116,'Lv','𫟷','Livermorium',7,16,6,293.0,12.9,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁴'],
+  [117,'Ts','鿬','Tennessine',7,17,5,294.0,7.2,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁵'],
+  [118,'Og','鿫','Oganesson',7,18,1,294.0,4.9,null,null,6.0,null,null,'[Rn] 5f¹⁴ 6d¹⁰ 7s² 7p⁶'],
+];
+
+// ================================================================
+//  类别配置
+// ================================================================
+const CATS = [
+  { cn: '非金属', en: 'Nonmetal', color: '#4caf50' },
+  { cn: '稀有气体', en: 'Noble Gas', color: '#ab47bc' },
+  { cn: '碱金属', en: 'Alkali Metal', color: '#ef5350' },
+  { cn: '碱土金属', en: 'Alkaline Earth', color: '#ffa726' },
+  { cn: '类金属', en: 'Metalloid', color: '#26c6da' },
+  { cn: '卤素', en: 'Halogen', color: '#42a5f5' },
+  { cn: '其他金属', en: 'Post-Transition', color: '#78909c' },
+  { cn: '过渡金属', en: 'Transition Metal', color: '#ffca28' },
+  { cn: '镧系', en: 'Lanthanide', color: '#ec407a' },
+  { cn: '锕系', en: 'Actinide', color: '#8d6e63' },
+  { cn: '未知', en: 'Unknown', color: '#666' },
+];
+
+// ================================================================
+//  状态
+// ================================================================
+const S = {
+  lang: 'cn',
+  heatmap: 'none',
+  filterCat: -1,
+  elements: [],
+};
+
+const L = (cn, en) => S.lang === 'en' ? en : cn;
+
+// ================================================================
+//  工具
+// ================================================================
+function valOrDash(v) {
+  if (v === null || v === undefined || v === '') return '—';
+  if (typeof v === 'number') {
+    if (Number.isInteger(v)) return v.toString();
+    return v.toFixed(4).replace(/\.?0+$/, '');
+  }
+  return v;
+}
+
+/** 热力图颜色：低→蓝 中→白 高→红 */
+function heatColor(val, min, max) {
+  if (val === null || min === max) return null;
+  const t = (val - min) / (max - min);
+  // blue(0,0.6,1) -> white(1,1,1) -> red(1,0.3,0.3)
+  const r = t < 0.5 ? 1 - t : 1;
+  const g = t < 0.5 ? 0.6 + t * 0.8 : 1 - (t - 0.5) * 1.4;
+  const b = t < 0.5 ? 1 : 1 - (t - 0.5) * 1.4;
+  const clamp = v => Math.max(0, Math.min(1, v));
+  const toHex = v => Math.round(clamp(v) * 255).toString(16).padStart(2, '0');
+  return '#' + toHex(r) + toHex(g) + toHex(b);
+}
+
+// ================================================================
+//  渲染周期表
+// ================================================================
+
+function render() {
+  const grid = document.getElementById('ptable');
+  grid.innerHTML = '';
+
+  // 每个元素按 (row, col) 放置
+  // 先清已有元素映射
+  const placed = {};
+
+  ELEMENTS.forEach(e => {
+    const [z, sym, cn, en, period, group, cat, mass] = e;
+    let row = period;
+    let col = group;
+
+    // 镧系 (57-71) 放在第 8 行
+    if (z >= 57 && z <= 71) { row = 8; col = 3 + (z - 57); }
+    // 锕系 (89-103)
+    if (z >= 89 && z <= 103) { row = 9; col = 3 + (z - 89); }
+
+    placed[z] = { row, col, e };
+  });
+
+  // 构建网格：10 行 × 18 列
+  for (let r = 1; r <= 9; r++) {
+    // 行号标签
+    const lbl = document.createElement('div');
+    lbl.className = 'label-cell';
+    if (r <= 7) lbl.textContent = r;
+    else if (r === 8) lbl.textContent = L('镧系', 'La');
+    else if (r === 9) lbl.textContent = L('锕系', 'Ac');
+    lbl.style.gridRow = r; lbl.style.gridColumn = 1;
+    grid.appendChild(lbl);
+
+    for (let c = 1; c <= 18; c++) {
+      // 查找该位置的元素
+      let found = null;
+      for (const z in placed) {
+        if (placed[z].row === r && placed[z].col === c) {
+          found = placed[z].e;
+          break;
+        }
+      }
+
+      const cell = document.createElement('div');
+      cell.style.gridRow = r;
+      cell.style.gridColumn = c + 1;
+
+      if (found) {
+        const [z, sym, cn, en, period, group, catIdx, mass] = found;
+        const cat = CATS[catIdx];
+        const bg = cat ? cat.color : '#444';
+
+        // 热力图颜色
+        let heatBg = null;
+        if (S.heatmap !== 'none') {
+          const vals = ELEMENTS.map(e => e[getHeatPropIdx(S.heatmap)]).filter(v => v !== null);
+          const min = Math.min(...vals), max = Math.max(...vals);
+          const val = found[getHeatPropIdx(S.heatmap)];
+          heatBg = heatColor(val, min, max);
+        }
+
+        cell.className = 'elem';
+        cell.style.background = heatBg ? heatColor(heatBg) : bg + '22';
+        cell.style.borderColor = heatBg ? heatBg : bg + '44';
+
+        // 分类筛选高亮
+        if (S.filterCat >= 0 && catIdx !== S.filterCat) {
+          cell.style.opacity = '0.25';
+        }
+
+        const name = S.lang === 'en' ? en : cn;
+        cell.innerHTML = `
+          <div class="z">${z}</div>
+          <div class="sym">${sym}</div>
+          <div class="name">${name}</div>
+          <div class="mass">${valOrDash(mass)}</div>
+        `;
+        cell.addEventListener('click', () => showDetail(found));
+      } else {
+        cell.className = 'empty-cell';
+      }
+      grid.appendChild(cell);
+    }
+  }
+
+  renderLegend();
+  renderCategories();
+}
+
+function getHeatPropIdx(key) {
+  const map = { radius: 9, en: 10, ie: 11, mp: 12, bp: 13 };
+  return map[key] || -1;
+}
+
+// ================================================================
+//  图例
+// ================================================================
+function renderLegend() {
+  const el = document.getElementById('legend');
+  el.innerHTML = '';
+  CATS.forEach((c, i) => {
+    const d = document.createElement('div');
+    d.className = 'legend-item';
+    d.innerHTML = `<span class="swatch" style="background:${c.color}"></span>${L(c.cn, c.en)}`;
+    el.appendChild(d);
+  });
+}
+
+// ================================================================
+//  分类按钮
+// ================================================================
+function renderCategories() {
+  const el = document.getElementById('categories');
+  el.innerHTML = `<button class="cat-btn ${S.filterCat === -1 ? 'active' : ''}" data-ci="-1">${L('全部', 'All')}</button>`;
+  CATS.forEach((c, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'cat-btn' + (S.filterCat === i ? ' active' : '');
+    btn.dataset.ci = i;
+    btn.textContent = L(c.cn, c.en);
+    btn.addEventListener('click', () => {
+      S.filterCat = S.filterCat === i ? -1 : i;
+      render();
+    });
+    el.appendChild(btn);
+  });
+}
+
+// ================================================================
+//  详情面板
+// ================================================================
+function showDetail(e) {
+  const [z, sym, cn, en, period, group, catIdx, mass, density, radius, enVal, ie, mp, bp, config] = e;
+  const cat = CATS[catIdx];
+  const name = S.lang === 'en' ? en : cn;
+  const enName = S.lang === 'en' ? cn : en;
+
+  document.getElementById('dSym').textContent = sym;
+  document.getElementById('dSym').style.color = cat.color;
+  document.getElementById('dName').textContent = `${name} / ${enName}`;
+  document.getElementById('dSub').textContent = `${config} · ${L(cat.cn, cat.en)}`;
+
+  const props = [
+    [L('原子序数', 'Atomic Number'), z],
+    [L('相对原子质量', 'Atomic Mass'), valOrDash(mass) + ' u'],
+    [L('周期', 'Period'), period],
+    [L('族', 'Group'), group],
+    [L('密度', 'Density'), density ? valOrDash(density) + ' g/cm³' : '—'],
+    [L('原子半径', 'Atomic Radius'), radius ? valOrDash(radius) + ' pm' : '—'],
+    [L('电负性', 'Electronegativity'), valOrDash(enVal)],
+    [L('电离能', 'Ionization Energy'), ie ? valOrDash(ie) + ' eV' : '—'],
+    [L('熔点', 'Melting Point'), mp ? valOrDash(mp) + ' K' : '—'],
+    [L('沸点', 'Boiling Point'), bp ? valOrDash(bp) + ' K' : '—'],
+    [L('电子排布', 'Electron Config.'), config],
+  ];
+
+  document.getElementById('dProps').innerHTML = props.map(p =>
+    `<div class="d-prop"><span class="key">${p[0]}</span><span class="val">${p[1]}</span></div>`
+  ).join('');
+
+  document.getElementById('detailOverlay').classList.add('show');
+}
+
+// ================================================================
+//  事件绑定
+// ================================================================
+
+// 热力图切换
+document.querySelectorAll('[data-heat]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-heat]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    S.heatmap = btn.dataset.heat;
+    render();
+  });
+});
+
+// 标准按钮
+document.getElementById('heatNone').addEventListener('click', () => {
+  document.querySelectorAll('[data-heat]').forEach(b => b.classList.remove('active'));
+  document.getElementById('heatNone').classList.add('active');
+  S.heatmap = 'none';
+  render();
+});
+
+// 语言切换
+document.getElementById('langToggle').addEventListener('click', () => {
+  S.lang = S.lang === 'cn' ? 'en' : 'cn';
+  document.getElementById('langToggle').textContent = S.lang === 'cn' ? 'EN' : '中文';
+  document.getElementById('titleText').textContent = L('元素周期表', 'Periodic Table');
+  document.getElementById('titleSub').textContent = S.lang === 'cn' ? '118 种化学元素 · 点击查看详情' : '118 Elements · Click for details';
+  render();
+});
+
+// 关闭详情
+document.getElementById('detailClose').addEventListener('click', () => {
+  document.getElementById('detailOverlay').classList.remove('show');
+});
+document.getElementById('detailOverlay').addEventListener('click', (e) => {
+  if (e.target === e.currentTarget) {
+    document.getElementById('detailOverlay').classList.remove('show');
+  }
+});
+
+// ================================================================
+//  初始化
+// ================================================================
+render();
+</script>
+</body>
+</html>

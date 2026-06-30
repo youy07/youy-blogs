@@ -1,7 +1,7 @@
 ---
 Title: 变量与数据类型
 Date: 2026-06-24
-Category: python入门
+Category: python
 Tags: python
 Series: python入门
 Series_index: 3

@@ -1,7 +1,7 @@
 ---
 Title: Hello Python — 你的第一个Python程序
 Date: 2026-06-24
-Category: python入门
+Category: python
 Tags: python
 Series: python入门
 Series_index: 2
@@ -153,5 +153,3 @@ print(2 ** 10)  # 输出 1024
 💡 学习建议
 
 不要只是阅读代码，一定要亲手敲一遍！肌肉记忆对编程学习非常重要。如果练习中遇到问题，随时向AI助手提问。
-
-[← 预备课：环境搭建](0000-setup.html)[🏠 课程首页](../MISSION.md)[第二课：变量与数据类型 →](0002-data-types.html)

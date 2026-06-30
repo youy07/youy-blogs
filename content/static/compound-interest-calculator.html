@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>复利计算器 - 在线投资理财计算</title>
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+  background: #f5f7fa; color: #1e293b;
+  min-height: 100vh; display: flex; justify-content: center; padding: 30px 16px;
+}
+
+.container { max-width: 960px; width: 100%; }
+
+/* 标题区 */
+.header { text-align: center; margin-bottom: 32px; }
+.header h1 { font-size: clamp(1.5rem, 4vw, 2rem); color: #0f172a; font-weight: 800; }
+.header h1 span { background: linear-gradient(135deg, #2563eb, #06b6d4); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+.header p { color: #64748b; margin-top: 6px; font-size: 0.95rem; }
+
+.main-grid {
+  display: grid; grid-template-columns: 360px 1fr; gap: 24px;
+}
+
+/* ===== 输入面板 ===== */
+.panel {
+  background: #fff; border-radius: 16px; padding: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #eef2f6;
+}
+.panel h2 { font-size: 0.9rem; color: #64748b; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 16px; }
+
+.form-group { margin-bottom: 16px; }
+.form-group label { display: block; font-size: 0.85rem; font-weight: 600; color: #334155; margin-bottom: 5px; }
+.form-group .input-wrap { position: relative; }
+.form-group .input-wrap .prefix {
+  position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+  color: #94a3b8; font-weight: 600; font-size: 0.9rem; pointer-events: none;
+}
+.form-group .input-wrap .suffix {
+  position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
+  color: #94a3b8; font-size: 0.85rem; pointer-events: none;
+}
+.form-group input, .form-group select {
+  width: 100%; padding: 10px 12px; border: 1.5px solid #e2e8f0; border-radius: 10px;
+  font-size: 0.95rem; color: #1e293b; background: #fafbfc;
+  transition: all 0.15s; outline: none; -webkit-appearance: none;
+}
+.form-group input:focus, .form-group select:focus {
+  border-color: #2563eb; box-shadow: 0 0 0 3px rgba(37,99,235,0.1); background: #fff;
+}
+.form-group input.has-prefix { padding-left: 32px; }
+.form-group input.has-suffix { padding-right: 36px; }
+.form-group select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%2394a3b8' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; padding-right: 28px; }
+
+.btn-calc {
+  width: 100%; padding: 12px; border: none; border-radius: 10px;
+  background: linear-gradient(135deg, #2563eb, #06b6d4); color: #fff;
+  font-size: 1rem; font-weight: 700; cursor: pointer;
+  transition: all 0.15s; letter-spacing: 0.5px;
+}
+.btn-calc:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(37,99,235,0.3); }
+
+/* ===== 结果区 ===== */
+.results { display: flex; flex-direction: column; gap: 16px; }
+
+/* 结果卡片 */
+.result-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+.result-card {
+  background: #fff; border-radius: 14px; padding: 18px 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #eef2f6;
+}
+.result-card .label { font-size: 0.78rem; color: #94a3b8; margin-bottom: 4px; }
+.result-card .value { font-size: 1.25rem; font-weight: 700; color: #0f172a; font-variant-numeric: tabular-nums; }
+.result-card .value.primary { color: #2563eb; }
+.result-card .value.green { color: #16a34a; }
+.result-card .sub { font-size: 0.75rem; color: #94a3b8; margin-top: 2px; }
+
+.result-card.highlight {
+  background: linear-gradient(135deg, #eef2ff, #f0f9ff);
+  border-color: #bfdbfe;
+}
+
+.result-card.full { grid-column: 1 / -1; }
+
+/* 图表容器 */
+.chart-wrap {
+  background: #fff; border-radius: 14px; padding: 16px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #eef2f6;
+}
+.chart-wrap h3 { font-size: 0.85rem; color: #64748b; margin-bottom: 8px; }
+#growthChart { width: 100%; height: 200px; display: block; }
+
+/* 72法则 */
+.rule72-box {
+  background: linear-gradient(135deg, #fef9c3, #fef3c7);
+  border: 1px solid #fde68a; border-radius: 12px; padding: 14px 16px;
+}
+.rule72-box .title { font-size: 0.85rem; font-weight: 700; color: #92400e; margin-bottom: 4px; }
+.rule72-box .content { font-size: 0.9rem; color: #78350f; }
+.rule72-box .content strong { font-size: 1rem; }
+
+/* 说明区 */
+.explanation {
+  background: #fff; border-radius: 16px; padding: 24px; margin-top: 24px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.06); border: 1px solid #eef2f6;
+}
+.explanation h3 { font-size: 1rem; color: #0f172a; margin-bottom: 12px; font-weight: 700; }
+.explanation p, .explanation li { font-size: 0.9rem; color: #475569; line-height: 1.7; }
+.explanation ul { padding-left: 18px; margin-top: 6px; }
+.explanation li { margin-bottom: 4px; }
+.explanation .formula {
+  background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 10px 14px; font-family: 'Times New Roman', serif;
+  font-size: 1rem; text-align: center; margin: 8px 0; color: #0f172a;
+}
+.explanation .formula em { font-style: italic; }
+
+/* 表格 */
+.year-table-wrap { overflow-x: auto; margin-top: 12px; }
+.year-table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+.year-table th { background: #f1f5f9; color: #475569; font-weight: 600; padding: 8px 10px; text-align: right; border-bottom: 2px solid #e2e8f0; }
+.year-table th:first-child { text-align: left; }
+.year-table td { padding: 7px 10px; text-align: right; border-bottom: 1px solid #f1f5f9; color: #334155; }
+.year-table td:first-child { text-align: left; font-weight: 600; color: #0f172a; }
+.year-table tr:last-child td { border-bottom: none; }
+.year-table tr:last-child td { font-weight: 700; color: #2563eb; }
+
+/* 响应式 */
+@media (max-width: 720px) {
+  .main-grid { grid-template-columns: 1fr; }
+  .result-cards { grid-template-columns: 1fr 1fr; }
+  body { padding: 16px 12px; }
+}
+
+@media (max-width: 400px) {
+  .result-cards { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<div class="container">
+  <!-- 标题 -->
+  <div class="header">
+    <h1><span>复利计算器</span></h1>
+    <p>输入本金、利率与期限，快速计算复利终值与投资收益</p>
+  </div>
+
+  <div class="main-grid">
+    <!-- 左侧：输入 -->
+    <div class="panel">
+      <h2>参数输入</h2>
+      <div class="form-group">
+        <label>本金金额</label>
+        <div class="input-wrap">
+          <span class="prefix">¥</span>
+          <input type="number" class="has-prefix" id="principal" value="100000" step="1000" min="0">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>年利率</label>
+        <div class="input-wrap">
+          <input type="number" class="has-suffix" id="rate" value="5" step="0.1" min="0" max="100">
+          <span class="suffix">%</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>投资期限</label>
+        <div class="input-wrap">
+          <input type="number" class="has-suffix" id="years" value="10" step="1" min="1" max="100">
+          <span class="suffix">年</span>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>复利频率</label>
+        <select id="frequency">
+          <option value="1">每年 (1次/年)</option>
+          <option value="2">每半年 (2次/年)</option>
+          <option value="4" selected>每季度 (4次/年)</option>
+          <option value="12">每月 (12次/年)</option>
+          <option value="365">每日 (365次/年)</option>
+        </select>
+      </div>
+      <button class="btn-calc" id="calcBtn">计算复利</button>
+    </div>
+
+    <!-- 右侧：结果 -->
+    <div class="results">
+      <div class="result-cards">
+        <div class="result-card highlight">
+          <div class="label">终值 (FV)</div>
+          <div class="value primary" id="fvDisplay">¥164,361.95</div>
+          <div class="sub">本息合计</div>
+        </div>
+        <div class="result-card">
+          <div class="label">利息总额</div>
+          <div class="value green" id="interestDisplay">¥64,361.95</div>
+          <div class="sub">收益 = 终值 − 本金</div>
+        </div>
+        <div class="result-card">
+          <div class="label">总收益率</div>
+          <div class="value" id="returnDisplay">64.36%</div>
+          <div class="sub">累计收益率</div>
+        </div>
+        <div class="result-card">
+          <div class="label">有效年利率 (EAR)</div>
+          <div class="value" id="earDisplay">5.09%</div>
+          <div class="sub">考虑复利频率后的实际年利率</div>
+        </div>
+      </div>
+
+      <!-- 72 法则 -->
+      <div class="rule72-box" id="rule72Box">
+        <div class="title">📐 72 法则</div>
+        <div class="content" id="rule72Content">
+          以 5% 的年利率，本金翻倍约需 <strong>14.4 年</strong>。
+        </div>
+      </div>
+
+      <!-- 增长图 -->
+      <div class="chart-wrap">
+        <h3>📈 各年增长趋势</h3>
+        <canvas id="growthChart"></canvas>
+      </div>
+
+      <!-- 年度明细表 -->
+      <div class="chart-wrap">
+        <h3>📊 年度明细</h3>
+        <div class="year-table-wrap">
+          <table class="year-table" id="yearTable"></table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 说明区 -->
+  <div class="explanation">
+    <h3>关于复利计算</h3>
+    <p><strong>复利</strong>（Compound Interest）是指把上期末的本利和作为下一期的本金，在计算时每一期本金的数额都不同。俗称"利滚利"。</p>
+    <div class="formula">
+      FV = PV × (1 + <em>r</em>/<em>n</em>)<sup><em>n</em> · <em>t</em></sup>
+    </div>
+    <ul>
+      <li><strong>FV</strong> — 终值（未来本息合计）</li>
+      <li><strong>PV</strong> — 现值（初始本金）</li>
+      <li><strong>r</strong> — 年利率（小数形式，如 5% = 0.05）</li>
+      <li><strong>n</strong> — 每年复利次数</li>
+      <li><strong>t</strong> — 投资年限</li>
+    </ul>
+    <h3 style="margin-top:16px;">📐 72 法则</h3>
+    <p>以固定年利率将本金翻倍所需的大致年数。该公式最适合 6%~10% 的利率，对低于 20% 的利率也较为有效。结果为近似值，而非精确值。</p>
+    <p style="margin-top:4px;"><strong>公式：</strong>翻倍年数 ≈ 72 ÷ 年利率(%)</p>
+    <p style="margin-top:4px;color:#64748b;">例：8% 年利率下，本金翻倍约需 72 ÷ 8 = <strong>9 年</strong>。</p>
+  </div>
+</div>
+
+<script>
+// ================================================================
+//  复利计算器
+// ================================================================
+
+const principalInp = document.getElementById('principal');
+const rateInp = document.getElementById('rate');
+const yearsInp = document.getElementById('years');
+const freqInp = document.getElementById('frequency');
+const calcBtn = document.getElementById('calcBtn');
+
+const fvDisplay = document.getElementById('fvDisplay');
+const interestDisplay = document.getElementById('interestDisplay');
+const returnDisplay = document.getElementById('returnDisplay');
+const earDisplay = document.getElementById('earDisplay');
+const rule72Content = document.getElementById('rule72Content');
+const yearTable = document.getElementById('yearTable');
+const canvas = document.getElementById('growthChart');
+const ctx = canvas.getContext('2d');
+
+// ================================================================
+//  计算
+// ================================================================
+
+function calcCompound(pv, rate, years, n) {
+  const r = rate / 100;
+  const fv = pv * Math.pow(1 + r / n, n * years);
+  const interest = fv - pv;
+  const totalReturn = (fv / pv - 1) * 100;
+  const ear = (Math.pow(1 + r / n, n) - 1) * 100;
+  return { fv, interest, totalReturn, ear };
+}
+
+/** 逐年年末数据 */
+function yearlyData(pv, rate, years, n) {
+  const r = rate / 100;
+  const data = [];
+  let current = pv;
+  for (let y = 1; y <= years; y++) {
+    current = pv * Math.pow(1 + r / n, n * y);
+    data.push({
+      year: y,
+      value: current,
+      interest: current - pv,
+      annualReturn: y === 1 ? (current - pv) : (current - pv) - (data[y - 2]?.interest || 0),
+    });
+    current = Math.round(current * 100) / 100;
+  }
+  return data;
+}
+
+// ================================================================
+//  渲染
+// ================================================================
+
+function formatMoney(v) {
+  return '¥' + v.toLocaleString('zh-CN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+
+function calcAndRender() {
+  const pv = parseFloat(principalInp.value) || 0;
+  const rate = parseFloat(rateInp.value) || 0;
+  const years = parseInt(yearsInp.value) || 1;
+  const n = parseInt(freqInp.value) || 1;
+
+  if (pv <= 0 || rate <= 0) {
+    fvDisplay.textContent = '¥0.00';
+    interestDisplay.textContent = '¥0.00';
+    returnDisplay.textContent = '0%';
+    earDisplay.textContent = '0%';
+    rule72Content.innerHTML = '请输入有效参数。';
+    yearTable.innerHTML = '';
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    return;
+  }
+
+  const { fv, interest, totalReturn, ear } = calcCompound(pv, rate, years, n);
+  fvDisplay.textContent = formatMoney(fv);
+  interestDisplay.textContent = formatMoney(interest);
+  returnDisplay.textContent = totalReturn.toFixed(2) + '%';
+  earDisplay.textContent = ear.toFixed(2) + '%';
+
+  // 72 法则
+  if (rate > 0) {
+    const years72 = 72 / rate;
+    rule72Content.innerHTML = `以 ${rate}% 的年利率，本金翻倍约需 <strong>${years72.toFixed(1)} 年</strong>。`;
+  } else {
+    rule72Content.innerHTML = '利率为 0% 时无法翻倍。';
+  }
+
+  // 年度明细表
+  const data = yearlyData(pv, rate, years, n);
+  renderTable(data);
+  renderChart(data, pv);
+}
+
+// ================================================================
+//  表格
+// ================================================================
+
+function renderTable(data) {
+  let html = `<thead><tr>
+    <th>年份</th><th>年末价值</th><th>当年收益</th><th>累计收益</th>
+  </tr></thead><tbody>`;
+  for (const d of data) {
+    html += `<tr>
+      <td>第 ${d.year} 年</td>
+      <td>${formatMoney(d.value)}</td>
+      <td>${formatMoney(Math.max(d.annualReturn, 0))}</td>
+      <td>${formatMoney(d.interest)}</td>
+    </tr>`;
+  }
+  html += '</tbody>';
+  yearTable.innerHTML = html;
+}
+
+// ================================================================
+//  图表
+// ================================================================
+
+function renderChart(data, pv) {
+  const dpr = window.devicePixelRatio || 1;
+  const rect = canvas.getBoundingClientRect();
+  const W = rect.width;
+  const H = rect.height;
+  canvas.width = W * dpr;
+  canvas.height = H * dpr;
+  ctx.scale(dpr, dpr);
+
+  const pad = { top: 16, bottom: 28, left: 50, right: 16 };
+  const cw = W - pad.left - pad.right;
+  const ch = H - pad.top - pad.bottom;
+
+  // 清空
+  ctx.clearRect(0, 0, W, H);
+
+  if (data.length < 1) return;
+
+  const maxVal = data[data.length - 1].value;
+  const minVal = 0;
+
+  const xScale = (i) => pad.left + (i / (data.length - 1 || 1)) * cw;
+  const yScale = (v) => pad.top + ch - ((v - minVal) / (maxVal - minVal || 1)) * ch;
+
+  // —— 网格 ——
+  ctx.strokeStyle = '#eef2f6';
+  ctx.lineWidth = 1;
+  const gridLines = 5;
+  for (let i = 0; i <= gridLines; i++) {
+    const y = pad.top + (i / gridLines) * ch;
+    ctx.beginPath(); ctx.moveTo(pad.left, y); ctx.lineTo(W - pad.right, y); ctx.stroke();
+
+    // Y 轴标签
+    const val = maxVal * (1 - i / gridLines);
+    ctx.fillStyle = '#94a3b8';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'right';
+    ctx.fillText(formatMoney(val).replace('¥', '¥'), pad.left - 6, y + 3);
+  }
+
+  // —— 填充渐变 ——
+  const grad = ctx.createLinearGradient(0, pad.top, 0, pad.top + ch);
+  grad.addColorStop(0, 'rgba(37,99,235,0.2)');
+  grad.addColorStop(1, 'rgba(37,99,235,0.01)');
+
+  ctx.beginPath();
+  ctx.moveTo(xScale(0), yScale(data[0].value));
+  for (let i = 1; i < data.length; i++) {
+    ctx.lineTo(xScale(i), yScale(data[i].value));
+  }
+  ctx.lineTo(xScale(data.length - 1), pad.top + ch);
+  ctx.lineTo(xScale(0), pad.top + ch);
+  ctx.closePath();
+  ctx.fillStyle = grad;
+  ctx.fill();
+
+  // —— 折线 ——
+  ctx.beginPath();
+  ctx.moveTo(xScale(0), yScale(data[0].value));
+  for (let i = 1; i < data.length; i++) {
+    ctx.lineTo(xScale(i), yScale(data[i].value));
+  }
+  ctx.strokeStyle = '#2563eb';
+  ctx.lineWidth = 2.5;
+  ctx.lineJoin = 'round';
+  ctx.stroke();
+
+  // —— 数据点 ——
+  for (let i = 0; i < data.length; i++) {
+    const x = xScale(i);
+    const y = yScale(data[i].value);
+    ctx.beginPath();
+    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.fillStyle = '#fff';
+    ctx.fill();
+    ctx.strokeStyle = '#2563eb';
+    ctx.lineWidth = 2;
+    ctx.stroke();
+  }
+
+  // —— X 轴标签 ——
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'center';
+  const step = Math.max(1, Math.floor(data.length / 8));
+  for (let i = 0; i < data.length; i += step) {
+    const x = xScale(i);
+    ctx.fillText(data[i].year + '年', x, pad.top + ch + 16);
+  }
+  // 最后一个标签
+  if ((data.length - 1) % step !== 0) {
+    ctx.fillText(data[data.length - 1].year + '年', xScale(data.length - 1), pad.top + ch + 16);
+  }
+
+  // —— 本金参考线 ——
+  ctx.strokeStyle = '#94a3b8';
+  ctx.lineWidth = 1;
+  ctx.setLineDash([4, 4]);
+  ctx.beginPath();
+  const pvY = yScale(pv);
+  ctx.moveTo(pad.left, pvY);
+  ctx.lineTo(W - pad.right, pvY);
+  ctx.stroke();
+  ctx.setLineDash([]);
+  ctx.fillStyle = '#94a3b8';
+  ctx.font = '10px sans-serif';
+  ctx.textAlign = 'left';
+  ctx.fillText('本金 ' + formatMoney(pv).replace('¥', '¥'), W - pad.right - 110, pvY - 4);
+}
+
+// ================================================================
+//  事件
+// ================================================================
+
+calcBtn.addEventListener('click', calcAndRender);
+
+// 回车触发计算
+document.querySelectorAll('input, select').forEach(el => {
+  el.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') calcAndRender();
+  });
+});
+
+// 窗口变化重绘图表
+let resizeTimer;
+window.addEventListener('resize', () => {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(calcAndRender, 200);
+});
+
+// ================================================================
+//  启动
+// ================================================================
+calcAndRender();
+</script>
+</body>
+</html>
