@@ -16,4 +16,4 @@ Slug: about
 ### 联系方式
 - 邮箱：raoxp7@sina.com
 - 微信：![wechat]({static}/images/me.png)
-- web:   https://youy-blogs.netlify.app/
+- 网址:   [youy-blogs.netlify.app](https://youy-blogs.netlify.app/)
