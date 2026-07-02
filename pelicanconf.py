@@ -45,11 +45,13 @@ ARTICLE_EXCLUDES = ['static']         # 排除文章处理
 PAGE_EXCLUDES = ['static']            # 排除页面处理
 
 # ===== 自定义菜单 =====
-MAIN_MENU = False
+DISPLAY_PAGES_ON_MENU = False
+MAIN_MENU = True
 MENUITEMS = [
-    ('打字挑战', '/static/typing-challenge.html'),
-    # ('归档', '/archives.html'),
-    # ('关于', '/pages/about.html'),
+    ('免费资源', '/pages/free.html'),
+    ('小工具', '/pages/tool.html'),
+    ('小游戏', '/pages/game.html'),
+    ('关于', '/pages/about.html'),
 ]
 
 SITEMAP = {

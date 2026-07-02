@@ -1,6 +1,6 @@
 ---
 Title: 免费资源
-Slug: contact
+Slug: free
 ---
 
 ### 免费资源

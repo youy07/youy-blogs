@@ -52,11 +52,11 @@
 				{% endfor %}
 			{% endif %}
 		  </ul>
-          {% if DISPLAY_PAGES_ON_MENU %}
-          {% for pg in pages %}
-          <li><a href="{{ SITEURL }}/{{ pg.url }}">{{ pg.title }}</a></li>
-          {% endfor %}
-          {% endif %}
+            {% if DISPLAY_PAGES_ON_MENU %}
+			    {% for pg in pages %}
+			       <li><a href="{{ SITEURL }}/{{ pg.url }}">{{ pg.title }}</a></li>
+			    {% endfor %}
+            {% endif %}
           <!-- <li><a href="{{ SITEURL }}/archives.html">归档</a></li> -->
           <!-- <li><a href="{{ SITEURL }}/categories.html">分类</a></li> -->
           <!-- <li><a href="{{ SITEURL }}/tags.html">标签</a></li> -->
@@ -78,7 +78,8 @@
 
   <footer class="site-footer">
     <div class="container">
-      <p>&copy; {{ SITENAME }} {% if articles %}{{ articles[0].date.strftime('%Y') }}{% endif %}. Powered by <a href="https://getpelican.com/">Pelican</a>.</p>
+      <p>&copy; {{ SITENAME }} {% if articles %}{{ articles[0].date.strftime('%Y') }}{% endif %}. Powered by <a href="https://getpelican.com/">Youy</a>.</p>
+	  <p><a href="{{ SITEURL }}/pages/privacy.html">Privacy Policy</a></p>
     </div>
   </footer>
 </body>
