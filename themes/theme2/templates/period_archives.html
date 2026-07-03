@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block title %}归档 — {{ SITENAME }}{% endblock %}
+{% block content %}
+<section class="archive period-archive">
+  <h1>
+    {% if period | length == 1 %}
+    {{ period[0] }} 年归档
+    {% elif period | length == 2 %}
+    {{ period[0] }} 年 {{ period[1] }} 月归档
+    {% else %}
+    {{ period[0] }} 年 {{ period[1] }} 月 {{ period[2] }} 日归档
+    {% endif %}
+  </h1>
+  <dl class="archive-list">
+    {% for article in dates %}
+    <dt>{{ article.date.strftime('%Y-%m-%d') }}</dt>
+    <dd><a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a></dd>
+    {% endfor %}
+  </dl>
+</section>
+{% endblock %}

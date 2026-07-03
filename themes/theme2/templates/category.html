@@ -1,0 +1,8 @@
+{% extends "index.html" %}
+{% block title %}{{ category }} — {{ SITENAME }}{% endblock %}
+{% block content %}
+<section class="category-page">
+  <h1>分类: {{ category }}</h1>
+  {{ super() }}
+</section>
+{% endblock %}
