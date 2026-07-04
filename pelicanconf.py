@@ -11,7 +11,7 @@ DEFAULT_LANG = 'Chinese (Simplified)'
 THEME = 'themes/theme'
 
 PLUGIN_PATHS = ['plugins']
-PLUGINS = ['sitemap', 'series','neighbors', 'related_posts']
+PLUGINS = ['sitemap', 'series','neighbors', 'related_posts', 'seo']
 
 # Feed generation is usually not desired when developing
 FEED_ALL_ATOM = None
@@ -57,9 +57,9 @@ MENUITEMS = [
 SITEMAP = {
     'format': 'xml',
     'priorities': {
-        'articles': 0.7,   # 文章优先级高
+        'articles': 0.5,   # 文章优先级高
         'indexes': 0.5,    # 分类/标签页中等
-        'pages': 0.3,      # 独立页面较低
+        'pages': 0.5,      # 独立页面较低
     },
     'changefreqs': {
         'articles': 'monthly',
@@ -69,3 +69,10 @@ SITEMAP = {
 }
 
 RELATED_POSTS_MAX = 3   # 最多显示 3 篇相关文章
+
+# SEO
+SEO_REPORT = True  # SEO report is enabled by default
+SEO_ENHANCER = True  # SEO enhancer is disabled by default
+SEO_ENHANCER_OPEN_GRAPH = False # Subfeature of SEO enhancer
+SEO_ENHANCER_TWITTER_CARDS = False # Subfeature of SEO enhancer
+SEO_ENHANCER_SITEMAP_URL = "https://youy-x.top/sitemap.xml"
