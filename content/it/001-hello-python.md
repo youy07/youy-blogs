@@ -1,5 +1,5 @@
 ---
-Title: Hello Python — 你的第一个Python程序
+Title: python入门:Hello Python — 你的第一个Python程序
 Date: 2026-06-24
 Category: python
 Tags: python
@@ -11,8 +11,6 @@ Summary: 欢迎来到Python的世界！这节课我们将了解Python是什么�
 
 
 第一阶段：基础语法
-
-## 第一课：Hello Python — 你的第一个Python程序
 
 欢迎来到Python的世界！这节课我们将了解Python是什么、写出第一行代码。
 

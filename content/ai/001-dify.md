@@ -1,5 +1,5 @@
 ---
-Title: Dify 是什么
+Title: dify入门:Dify 是什么—— 核心概念与架构概览
 Date: 2026-06-26
 Category: dify
 Tags: dify
@@ -8,10 +8,6 @@ Series_index: 1
 Author: 悠游
 Summary: 了解 Dify 的前世今生、核心功能模块和整体架构，建立对整个平台的宏观认知。
 ---
-
-第一课
-
-# Dify 是什么？—— 核心概念与架构概览
 
 了解 Dify 的前世今生、核心功能模块和整体架构，建立对整个平台的宏观认知。
 

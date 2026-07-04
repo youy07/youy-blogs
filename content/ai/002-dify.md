@@ -1,5 +1,5 @@
 ---
-Title: 在 Debian 虚拟机上部署 Dify
+Title: dify入门:在 Debian 虚拟机上部署 Dify
 Date: 2026-06-27
 Category: dify
 Tags: dify
@@ -8,10 +8,6 @@ Series_index: 2
 Author: 悠游
 Summary: 在你的 Debian 虚拟机上，用 Docker Compose 一键部署 Dify，并完成初始化设置，看到 Dify 的登录页面
 ---
-
-第二课
-
-# 在 Debian 虚拟机上部署 Dify
 
 跟着步骤走，5 分钟让你的第一个 AI 平台跑起来
 

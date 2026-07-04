@@ -1,19 +1,15 @@
 ---
-Title: 数据获取与处理
+Title: 量化策略入门:数据获取与处理——用Python拉取A股行情数据
 Date: 2026-06-29
 Category: 量化
 Tags: python, 量化
-Series: 动量策略入门
+Series: 量化策略入门
 Series_index: 2
 Author: 悠游
 Summary: 学会使用 AKShare 库获取 A 股历史行情数据，并做基础的数据清洗和预处理。
 ---
 
-# 数据获取与处理——用Python拉取A股行情数据
-
 Lesson 0002基础数据~20 min
-
-
 
 **本课目标：**学会使用 AKShare 库获取 A 股历史行情数据，并做基础的数据清洗和预处理。
 

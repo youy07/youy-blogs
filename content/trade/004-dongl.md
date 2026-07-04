@@ -1,19 +1,15 @@
 ---
-Title: 截面动量 vs 时序动量
+Title: 量化策略入门:截面动量 vs 时序动量——策略选择的关键区别
 Date: 2026-06-30
 Category: 量化
 Tags: python, 量化
-Series: 动量策略入门
+Series: 量化策略入门
 Series_index: 4
 Author: 悠游
 Summary: 理解截面动量（CSM）和时序动量（TSM）的核心区别、适用场景和实现方式
 ---
 
-# 截面动量 vs 时序动量——策略选择的关键区别
-
 Lesson 0004策略进阶~20 min
-
-
 
 **本课目标：**理解截面动量（CSM）和时序动量（TSM）的核心区别、适用场景和实现方式。
 

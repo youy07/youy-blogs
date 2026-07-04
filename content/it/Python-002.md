@@ -1,17 +1,13 @@
 ---
-Title: 变量与数据类型
+Title: python入门:变量与数据类型
 Date: 2026-06-24
 Category: python
 Tags: python
 Series: python入门
 Series_index: 3
 Author: 悠游
-Summary: 程序本质上是在处理数据。这节课学习如何用变量存储数据。
+Summary: 程序本质上是在处理数据。这节课学习如何用变量存储数据，以及Python中最常用的几种数据类型。
 ---
-
- 第一阶段：基础语法
-
- ## 第二课：变量与数据类型
 
  程序本质上是在处理数据。这节课学习如何用变量存储数据，以及Python中最常用的几种数据类型。
 ## 一、理论知识

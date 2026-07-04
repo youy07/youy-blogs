@@ -1,15 +1,13 @@
 ---
-Title: 理解动量策略
+Title: 量化策略入门:理解动量策略——什么是动量效应？为什么有效？
 Date: 2026-06-29
 Category: 量化
 Tags: python, 量化
-Series: 动量策略入门
+Series: 量化策略入门
 Series_index: 1
 Author: 悠游
 Summary: 理解动量效应的核心概念、学术起源，以及为什么它能在不同市场持续赚钱。
 ---
-
-# 动量策略入门——什么是动量效应？为什么有效？
 
 Lesson 0001基础概念~15 min
 

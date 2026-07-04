@@ -1,15 +1,13 @@
 ---
-Title: Python安装与环境搭建
+Title: python入门:Python安装与环境搭建
 Date: 2026-06-24
 Category: python
 Tags: python
 Series: python入门
 Series_index: 1
 Author: 悠游
-Summary: python之路，万里长征第一步，纪念一下。
+Summary: 在开始写代码之前，我们需要先准备好Python的运行环境。这节课会手把手带你完成安装和配置。
 ---
-
-# 预备课：Python安装与环境搭建
 
 在开始写代码之前，我们需要先准备好Python的运行环境。这节课会手把手带你完成安装和配置。
 

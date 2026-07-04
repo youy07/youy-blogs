@@ -24,8 +24,7 @@ AUTHOR_FEED_RSS = None
 LINKS = [
     ("我的小店", "https://m.tb.cn/h.RsjkdfC?tk=DcsDgiJeKN6/"),
     ("Python.org", "https://www.python.org/"),
-    ("Jinja2", "https://palletsprojects.com/p/jinja/"),
-    ("You can modify those links in your config file", "#"),
+    # ("You can modify those links in your config file", "#"),
 ]
 
 # Social widget

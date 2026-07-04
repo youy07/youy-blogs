@@ -1,5 +1,5 @@
 ---
-Title: 模型接入与配置实战
+Title: dify入门:模型接入与配置实战
 Date: 2026-06-28
 Category: dify
 Tags: dify
@@ -8,10 +8,6 @@ Series_index: 3
 Author: 悠游
 Summary: 在 Dify 控制台里完成至少 2 个模型的接入配置，并理解不同模型类型（系统推理 / 对话 / Embedding）的区别与用途
 ---
-
-第三课
-
-# 模型接入与配置实战
 
 让 Dify 真正"有脑可动"——手把手配置大模型
 

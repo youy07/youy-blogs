@@ -1,19 +1,15 @@
 ---
-Title: 第一个回测
+Title: 量化策略入门:第一个回测——实现最简单的动量策略
 Date: 2026-06-29
 Category: 量化
 Tags: python, 量化
-Series: 动量策略入门
+Series: 量化策略入门
 Series_index: 3
 Author: 悠游
 Summary: 用 Python 实现第一个动量策略回测——买入过去 N 日涨幅最大的股票，持有 M 日。
 ---
 
-# 第一个回测——实现最简单的动量策略
-
 Lesson 0003回测基础~20 min
-
-
 
 **本课目标：**用 Python 实现第一个动量策略回测——买入过去 N 日涨幅最大的股票，持有 M 日。
 

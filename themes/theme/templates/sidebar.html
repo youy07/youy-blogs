@@ -37,26 +37,26 @@
   </section>
   {% endif %}
 
-  {% if SOCIAL %}
-  <section class="widget">
-    <h3 class="widget-title">社交</h3>
-    <ul class="widget-list">
-      {% for name, link in SOCIAL %}
-      <li><a href="{{ link }}" target="_blank" rel="noopener">{{ name }}</a></li>
-      {% endfor %}
-    </ul>
-  </section>
-  {% endif %}
+  <!-- {% if SOCIAL %} -->
+  <!-- <section class="widget"> -->
+    <!-- <h3 class="widget-title">社交</h3> -->
+    <!-- <ul class="widget-list"> -->
+      <!-- {% for name, link in SOCIAL %} -->
+      <!-- <li><a href="{{ link }}" target="_blank" rel="noopener">{{ name }}</a></li> -->
+      <!-- {% endfor %} -->
+    <!-- </ul> -->
+  <!-- </section> -->
+  <!-- {% endif %} -->
 
-  <section class="widget">
-    <h3 class="widget-title">订阅</h3>
-    <ul class="widget-list">
-      {% if FEED_ALL_ATOM %}
-      <li><a href="{{ FEED_ALL_ATOM }}" target="_blank" rel="noopener">Atom</a></li>
-      {% endif %}
-      {% if FEED_ALL_RSS %}
-      <li><a href="{{ FEED_ALL_RSS }}" target="_blank" rel="noopener">RSS</a></li>
-      {% endif %}
-    </ul>
-  </section>
+  <!-- <section class="widget"> -->
+    <!-- <h3 class="widget-title">订阅</h3> -->
+    <!-- <ul class="widget-list"> -->
+      <!-- {% if FEED_ALL_ATOM %} -->
+      <!-- <li><a href="{{ FEED_ALL_ATOM }}" target="_blank" rel="noopener">Atom</a></li> -->
+      <!-- {% endif %} -->
+      <!-- {% if FEED_ALL_RSS %} -->
+      <!-- <li><a href="{{ FEED_ALL_RSS }}" target="_blank" rel="noopener">RSS</a></li> -->
+      <!-- {% endif %} -->
+    <!-- </ul> -->
+  <!-- </section> -->
 </div>
