@@ -16,3 +16,8 @@ Slug: tool
 - [番茄时钟](/static/tomato-timer.html)
 
   > 描述：自定义时钟，专注做事
+
+- [老黄历](/static/huangl.html)
+
+  > 描述：了解今日吉凶，趋利避害，招财进宝，逢凶化吉
+

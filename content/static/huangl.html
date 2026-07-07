@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta content="了解今日吉凶，趋利避害，招财进宝，逢凶化吉" name="description"/>
+    <meta content="命理" name="keywords"/>
+    <title>2026年7月7日黄历</title>
+    <style>
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+            color: #333;
+        }
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+        }
+        .header .date-info {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .section {
+            background: white;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+        .yi-ji {
+            display: flex;
+            gap: 20px;
+        }
+        .yi, .ji {
+            flex: 1;
+        }
+        .yi h3, .ji h3 {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        .yi h3 { color: #e74c3c; }
+        .ji h3 { color: #27ae60; }
+        .yi ul, .ji ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .yi li, .ji li {
+            padding: 5px 0;
+            font-size: 14px;
+        }
+        .shichen-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+        .shichen-table th, .shichen-table td {
+            border: 1px solid #ddd;
+            padding: 8px 5px;
+            text-align: center;
+        }
+        .shichen-table th {
+            background: #667eea;
+            color: white;
+        }
+        .shichen-table .ji-shi {
+            background: #ffe6e6;
+        }
+        .shichen-table .ji-shi span {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .shichen-table .ji-shi span::before {
+            content: '✓';
+            margin-right: 3px;
+        }
+        .shichen-table .xiong-shi {
+            background: #e8f5e9;
+        }
+        .shichen-table .xiong-shi span {
+            color: #666;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+        .info-item {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+        }
+        .info-item .label {
+            font-size: 12px;
+            color: #888;
+            margin-bottom: 5px;
+        }
+        .info-item .value {
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .wuxing-yangli {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .wuxing-item, .yangli-item {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+        .wuxing-item .label, .yangli-item .label {
+            color: #888;
+            font-size: 12px;
+        }
+        .wuxing-item .value, .yangli-item .value {
+            font-weight: bold;
+            margin-top: 3px;
+        }
+        .xuanyi {
+            text-align: center;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 10px;
+            margin-bottom: 15px;
+        }
+        .xuanyi .score {
+            font-size: 48px;
+            font-weight: bold;
+            margin: 10px 0;
+        }
+        .xuanyi .label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .chongsha {
+            background: #fff3cd;
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 15px;
+        }
+        .chongsha h4 {
+            margin: 0 0 10px 0;
+            color: #856404;
+        }
+        .chongsha ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .chongsha li {
+            font-size: 14px;
+            margin: 5px 0;
+        }
+        .shengxiao {
+            display: flex;
+            justify-content: space-around;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .shengxiao-item {
+            text-align: center;
+            padding: 15px;
+            border-radius: 8px;
+            min-width: 80px;
+        }
+        .shengxiao-item.teji { background: #ffe6e6; }
+        .shengxiao-item.ciji { background: #e8f5e9; }
+        .shengxiao-item.daishuai { background: #f5f5f5; }
+        .shengxiao-item .name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .shengxiao-item .tip {
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .yifu-color {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .color-item {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            padding: 8px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+        }
+        .color-item.daji { background: #ffe6e6; }
+        .color-item.ciji { background: #e8f5e9; }
+        .color-item.yiban { background: #f5f5f5; }
+        .color-item.jiaocha { background: #fff3cd; }
+        .color-item.buy { background: #e3f2fd; }
+        .color-box {
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+        }
+        .luck-numbers {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .luck-number {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+        .caishen {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .caishen-item {
+            flex: 1;
+            min-width: 100px;
+            text-align: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 8px;
+        }
+        .caishen-item .label {
+            font-size: 12px;
+            color: #888;
+        }
+        .caishen-item .value {
+            font-size: 14px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>2026年7月7日 黄历</h1>
+        <div class="date-info">
+            农历 二〇二六年 马年 五月廿三（小暑）<br>
+            丙午年（马）乙未月（羊）壬午日（马）
+        </div>
+    </div>
+
+    <div class="xuanyi">
+        <div class="label">今日运势评分</div>
+        <div class="score">58</div>
+        <div class="label">凶日</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">宜忌</div>
+        <div class="yi-ji">
+            <div class="yi">
+                <h3>宜</h3>
+                <ul>
+                    <li>祭祀</li>
+                    <li>交易</li>
+                    <li>纳财</li>
+                </ul>
+            </div>
+            <div class="ji">
+                <h3>忌</h3>
+                <ul>
+                    <li>斋醮</li>
+                    <li>开渠</li>
+                    <li>上梁</li>
+                    <li>动土</li>
+                    <li>破土</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">吉神宜趋</div>
+        <div>月空、天恩、阳德、官日、金堂、司命、鸣吠</div>
+        <div class="chongsha">
+            <h4>凶煞宜忌</h4>
+            <ul>
+                <li>月建、小时、土府、月刑、月厌、地火、土符</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">冲煞</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">日冲</div>
+                <div class="value">（丙子）鼠</div>
+            </div>
+            <div class="info-item">
+                <div class="label">日煞</div>
+                <div class="value">北</div>
+            </div>
+            <div class="info-item">
+                <div class="label">五行</div>
+                <div class="value">杨柳木</div>
+            </div>
+            <div class="info-item">
+                <div class="label">执位</div>
+                <div class="value">闭执位</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">时辰宜忌</div>
+        <table class="shichen-table">
+            <thead>
+                <tr>
+                    <th>时辰</th>
+                    <th>时间</th>
+                    <th>星神</th>
+                    <th>宜忌</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="ji-shi">
+                    <td>子时</td>
+                    <td>00:00-00:59</td>
+                    <td>金匮</td>
+                    <td><span>祈福求嗣订婚嫁娶求财开市交易安床入宅安葬祭祀祈福酬神求财见贵订婚嫁娶</span></td>
+                </tr>
+                <tr class="ji-shi">
+                    <td>丑时</td>
+                    <td>01:00-02:59</td>
+                    <td>天德</td>
+                    <td><span>入宅安葬祭祀祈福酬神求财见贵订婚嫁娶</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>寅时</td>
+                    <td>03:00-04:59</td>
+                    <td>白虎</td>
+                    <td><span>作灶祭祀斋醮酬神修造赴任出行见贵求财嫁娶入宅移徙安葬</span></td>
+                </tr>
+                <tr class="ji-shi">
+                    <td>卯时</td>
+                    <td>05:00-06:59</td>
+                    <td>玉堂</td>
+                    <td><span>求嗣订婚嫁娶修造入宅求财开市交易安葬赴任出行见贵</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>辰时</td>
+                    <td>07:00-08:59</td>
+                    <td>天牢</td>
+                    <td><span>祈福订婚嫁娶安床移徙入宅安葬赴任出行求财见贵</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>巳时</td>
+                    <td>09:00-10:59</td>
+                    <td>玄武</td>
+                    <td><span>求嗣嫁娶移徙入宅开市交易修造安葬祭祀祈福斋醮酬神</span></td>
+                </tr>
+                <tr class="ji-shi">
+                    <td>午时</td>
+                    <td>11:00-12:59</td>
+                    <td>司命</td>
+                    <td><span>出行求财见贵酬神</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>未时</td>
+                    <td>13:00-14:59</td>
+                    <td>勾陈</td>
+                    <td><span>见贵求财嫁娶进人口移徙安葬酬神</span></td>
+                </tr>
+                <tr class="ji-shi">
+                    <td>申时</td>
+                    <td>15:00-16:59</td>
+                    <td>青龙</td>
+                    <td><span>赴任出行求财见贵订婚嫁娶入宅开市祈福求嗣</span></td>
+                </tr>
+                <tr class="ji-shi">
+                    <td>酉时</td>
+                    <td>17:00-18:59</td>
+                    <td>明堂</td>
+                    <td><span>求嗣嫁娶移徙入宅开市交易修造安葬祭祀祈福斋醮酬神</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>戌时</td>
+                    <td>19:00-20:59</td>
+                    <td>天刑</td>
+                    <td><span>诸事不宜</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>亥时</td>
+                    <td>21:00-22:59</td>
+                    <td>朱雀</td>
+                    <td><span>修造入宅安葬赴任出行见贵求财订婚嫁娶进人口移徙</span></td>
+                </tr>
+                <tr class="xiong-shi">
+                    <td>子时</td>
+                    <td>23:00-23:59</td>
+                    <td>天刑</td>
+                    <td><span>嫁娶移徙入宅开市交易修造安葬赴任出行求财</span></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="section">
+        <div class="section-title">五行穿衣</div>
+        <div class="yifu-color">
+            <div class="color-item daji">
+                <span class="color-box" style="background: #f5c842;"></span>
+                大吉：黄色、咖啡色
+            </div>
+            <div class="color-item ciji">
+                <span class="color-box" style="background: #e74c3c;"></span>
+                次吉：红色、粉色、橙色、紫色
+            </div>
+            <div class="color-item yiban">
+                <span class="color-box" style="background: #333;"></span>
+                一般：黑色、浅蓝色
+            </div>
+            <div class="color-item jiaocha">
+                <span class="color-box" style="background: #27ae60;"></span>
+                较差：绿色、青色、深蓝色
+            </div>
+            <div class="color-item buy">
+                <span class="color-box" style="background: #fff;"></span>
+                不宜：白色、银色
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">幸运数字</div>
+        <div class="luck-numbers">
+            <span class="luck-number">8</span>
+            <span class="luck-number">4</span>
+            <span class="luck-number">6</span>
+            <span class="luck-number">7</span>
+            <span class="luck-number">5</span>
+            <span class="luck-number">3</span>
+            <span class="luck-number">21</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">生肖运势</div>
+        <div class="shengxiao">
+            <div class="shengxiao-item teji">
+                <div class="name">羊</div>
+                <div class="tip">特吉</div>
+            </div>
+            <div class="shengxiao-item ciji">
+                <div class="name">虎、狗</div>
+                <div class="tip">次吉</div>
+            </div>
+            <div class="shengxiao-item daishuai">
+                <div class="name">鼠、牛、兔</div>
+                <div class="tip">带衰</div>
+            </div>
+        </div>
+        <div class="chongsha">
+            <h4>今日冲煞</h4>
+            <ul>
+                <li>与生肖鼠相冲</li>
+                <li>与生肖马自刑</li>
+                <li>与生肖牛相害</li>
+                <li>与生肖兔相破</li>
+                <li>与生肖虎、狗三合</li>
+                <li>与生肖羊六合</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">财神喜神福神</div>
+        <div class="caishen">
+            <div class="caishen-item">
+                <div class="label">阳贵神</div>
+                <div class="value">正东</div>
+            </div>
+            <div class="caishen-item">
+                <div class="label">阴贵神</div>
+                <div class="value">东南</div>
+            </div>
+            <div class="caishen-item">
+                <div class="label">喜神</div>
+                <div class="value">正南</div>
+            </div>
+            <div class="caishen-item">
+                <div class="label">福神</div>
+                <div class="value">东南</div>
+            </div>
+            <div class="caishen-item">
+                <div class="label">财神</div>
+                <div class="value">正南</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">日柱信息</div>
+        <div class="info-grid">
+            <div class="info-item">
+                <div class="label">日柱</div>
+                <div class="value">壬午</div>
+            </div>
+            <div class="info-item">
+                <div class="label">八字</div>
+                <div class="value">丙午年 乙未月 壬午日</div>
+            </div>
+            <div class="info-item">
+                <div class="label">五行</div>
+                <div class="value">木</div>
+            </div>
+            <div class="info-item">
+                <div class="label">纳音</div>
+                <div class="value">杨柳木</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">建日</div>
+        <div>今日是<strong>闭日</strong></div>
+        <p style="font-size: 13px; color: #666; margin-top: 10px;">
+            闭日指不通闭塞。可以收敛、埋葬，余事不宜。
+        </p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">二十八宿</div>
+        <div>今日是<strong>东方七宿 室</strong>，对应的七政是 <strong>火</strong>，对应的动物是 <strong>猪</strong></div>
+        <p style="font-size: 13px; color: #666; margin-top: 10px;">
+            星宿歌诀：室星修造进田牛，儿孙代代近王侯，家贵荣华天上至，寿如彭祖八千秋，开门放水招财帛，和合婚姻生贵儿，埋葬若能依此日，门庭兴旺福无休。
+        </p>
+    </div>
+
+    <div class="section">
+        <div class="section-title">彭祖百忌</div>
+        <div>壬不泱水更难提防 午不苫盖屋主更张</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">胎神</div>
+        <div>仓库碓 外西北</div>
+    </div>
+
+    <div class="section">
+        <div class="section-title">吉时</div>
+        <div>今日有 6 个吉时：子时、丑时、卯时、午时、申时、酉时</div>
+    </div>
+</body>
+</html>
