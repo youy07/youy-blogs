@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG | default('zh-CN') }}">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+{% block seo %}
+<meta name="description" content="{{ SITEDESCRIPTION | default(SITENAME) }}">
+{% endblock %}
+<title>{% block title %}{{ SITENAME }}{% endblock %}</title>
+<link rel="stylesheet" href="{{ SITEURL }}/{{ THEME_STATIC_DIR }}/css/style.css">
+{% if FAVICON %}
+<link rel="icon" href="{{ FAVICON }}">
+{% endif %}
+{% if GOOGLE_ANALYTICS %}
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ GOOGLE_ANALYTICS }}"></script>
+<script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)};gtag('js',new Date());gtag('config','{{ GOOGLE_ANALYTICS }}');</script>
+{% endif %}
+{% block extra_head %}{% endblock %}
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <a class="nav-logo" href="{{ SITEURL }}/">{{ SITENAME }}</a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">☰</button>
+    <div class="nav-links" id="navLinks">
+      {% for title, link in LINKS %}
+      <a href="{{ link }}">{{ title }}</a>
+      {% endfor %}
+      {% if DISPLAY_PAGES_ON_MENU %}
+        {% for p in pages %}
+        <a href="{{ SITEURL }}/{{ p.url }}" {% if p == page %}class="active"{% endif %}>{{ p.title }}</a>
+        {% endfor %}
+      {% endif %}
+      {% if ARCHIVES_SAVE_AS %}
+      <a href="{{ SITEURL }}/{{ ARCHIVES_SAVE_AS }}">归档</a>
+      {% endif %}
+    </div>
+  </div>
+</nav>
+
+{% block hero %}{% endblock %}
+
+<main class="site-content">
+{% block content %}{% endblock %}
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <span class="footer-copy">&copy; {{ COPYRIGHT_YEAR | default('2025') }} {{ SITENAME }}</span>
+    <div class="footer-links">
+      {% if LINKS %}
+        {% for title, link in LINKS[-3:] %}
+        <a href="{{ link }}">{{ title }}</a>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </div>
+</footer>
+
+<script>
+document.getElementById('navToggle').addEventListener('click', function() {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+document.querySelectorAll('.article-card').forEach(function(card, i) {
+  card.style.animationDelay = (i * 0.1) + 's';
+});
+</script>
+{% block extra_scripts %}{% endblock %}
+</body>
+</html>

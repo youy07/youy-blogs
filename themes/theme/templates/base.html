@@ -84,8 +84,10 @@
             </div>
         </header>
 
+        {% block hero %}{% endblock %}
+
         <main class="site-content">
-            <div class="container content-wrapper">
+            <div class="content-wrapper">
                 <div class="content-main">
                     {% block content %}{% endblock %}
                 </div>

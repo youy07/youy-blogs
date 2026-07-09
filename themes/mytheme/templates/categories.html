@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}分类 — {{ SITENAME }}{% endblock %}
+
+{% block content %}
+<p class="section-label">分类</p>
+<h2 class="section-heading">文章分类</h2>
+<p class="page-lead">共 {{ categories|length }} 个分类</p>
+
+<div class="cloud-list">
+{% for cat, articles in categories %}
+  <a class="cloud-item" href="{{ SITEURL }}/{{ cat.url }}">
+    {{ cat }}
+    <span class="count">{{ articles|length }}</span>
+  </a>
+{% endfor %}
+</div>
+{% endblock %}

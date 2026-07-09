@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% block title %}{{ SITENAME }}{% endblock %}
+
+{% block hero %}
+<header class="hero">
+  <div class="hero-orb"></div>
+  <h1 class="hero-title">{{ SITENAME }}</h1>
+  {% if SITEDESCRIPTION %}
+  <p class="hero-sub">{{ SITEDESCRIPTION }}</p>
+  {% endif %}
+</header>
+{% endblock %}
+
+{% block content %}
+{% if tag %}
+  <p class="section-label" style="margin-bottom:0.5rem;">标签</p>
+  <h2 class="section-heading"># {{ tag }}</h2>
+  <p class="page-lead">共 {{ articles|length }} 篇文章</p>
+{% elif category %}
+  <p class="section-label" style="margin-bottom:0.5rem;">分类</p>
+  <h2 class="section-heading">{{ category }}</h2>
+  <p class="page-lead">共 {{ articles|length }} 篇文章</p>
+{% elif author %}
+  <p class="section-label" style="margin-bottom:0.5rem;">作者</p>
+  <h2 class="section-heading">{{ author }}</h2>
+  <p class="page-lead">共 {{ articles|length }} 篇文章</p>
+{% else %}
+  <p class="section-label">最新文章</p>
+  <h2 class="section-heading">思考与记录</h2>
+{% endif %}
+
+<div class="articles-grid">
+  {% for article in articles_page.object_list %}
+  <a class="article-card" href="{{ SITEURL }}/{{ article.url }}">
+    <span class="card-date">{{ article.date.strftime('%Y.%m.%d') }}</span>
+    <h3 class="card-title">{{ article.title }}</h3>
+    {% if article.summary %}
+    <p class="card-excerpt">{{ article.summary | striptags | truncate(120) }}</p>
+    {% endif %}
+    <div class="card-footer">
+      {% if article.category %}
+      <span class="card-cat">{{ article.category }}</span>
+      {% endif %}
+      {% if article.tags %}
+        {% for tag in article.tags[:2] %}
+        <span class="card-tag">{{ tag }}</span>
+        {% endfor %}
+      {% endif %}
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+{% if articles_paginator.num_pages > 1 %}
+<nav class="pagination">
+  {% if articles_page.has_previous() %}
+  <a href="{{ SITEURL }}/{{ articles_previous_page.url }}">‹ 上一页</a>
+  {% else %}
+  <span class="disabled">‹ 上一页</span>
+  {% endif %}
+  {% for p in range(1, articles_paginator.num_pages + 1) %}
+    {% if p == articles_page.number %}
+    <span class="current">{{ p }}</span>
+    {% else %}
+    <a href="{{ SITEURL }}/{{ articles_paginator.page(p).url }}">{{ p }}</a>
+    {% endif %}
+  {% endfor %}
+  {% if articles_page.has_next() %}
+  <a href="{{ SITEURL }}/{{ articles_next_page.url }}">下一页 ›</a>
+  {% else %}
+  <span class="disabled">下一页 ›</span>
+  {% endif %}
+</nav>
+{% endif %}
+{% endblock %}

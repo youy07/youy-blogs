@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}作者 — {{ SITENAME }}{% endblock %}
+
+{% block content %}
+<p class="section-label">作者</p>
+<h2 class="section-heading">文章作者</h2>
+<p class="page-lead">共 {{ authors|length }} 位作者</p>
+
+<div class="cloud-list">
+{% for author, articles in authors %}
+  <a class="cloud-item" href="{{ SITEURL }}/{{ author.url }}">
+    {{ author }}
+    <span class="count">{{ articles|length }}</span>
+  </a>
+{% endfor %}
+</div>
+{% endblock %}

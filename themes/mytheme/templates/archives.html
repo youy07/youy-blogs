@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}归档 — {{ SITENAME }}{% endblock %}
+
+{% block content %}
+<p class="section-label">归档</p>
+<h2 class="section-heading">文章归档</h2>
+<p class="page-lead">共 {{ articles|length }} 篇文章</p>
+
+<ul class="archive-list">
+{% for article in articles %}
+  <li>
+    <span class="date">{{ article.date.strftime('%Y-%m-%d') }}</span>
+    <a href="{{ SITEURL }}/{{ article.url }}">{{ article.title }}</a>
+  </li>
+{% endfor %}
+</ul>
+{% endblock %}

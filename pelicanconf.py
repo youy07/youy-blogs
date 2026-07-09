@@ -33,7 +33,7 @@ SOCIAL = [
     ("Another social link", "#"),
 ]
 
-DEFAULT_PAGINATION = 10
+DEFAULT_PAGINATION = 9
 
 # Uncomment following line if you want document-relative URLs when developing
 # RELATIVE_URLS = True
@@ -47,6 +47,7 @@ PAGE_EXCLUDES = ['static']            # 排除页面处理
 DISPLAY_PAGES_ON_MENU = False
 MAIN_MENU = True
 MENUITEMS = [
+    ('看盘', '/static/aind.html'),
     ('免费资源', '/pages/free.html'),
     ('小工具', '/pages/tool.html'),
     ('小游戏', '/pages/game.html'),

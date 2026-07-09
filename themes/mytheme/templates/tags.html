@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}标签 — {{ SITENAME }}{% endblock %}
+
+{% block content %}
+<p class="section-label">标签</p>
+<h2 class="section-heading">文章标签</h2>
+<p class="page-lead">共 {{ tags|length }} 个标签</p>
+
+<div class="cloud-list">
+{% for tag, articles in tags %}
+  <a class="cloud-item" href="{{ SITEURL }}/{{ tag.url }}">
+    #{{ tag }}
+    <span class="count">{{ articles|length }}</span>
+  </a>
+{% endfor %}
+</div>
+{% endblock %}

@@ -53,6 +53,7 @@ a:hover {
   display: flex;
   gap: 2rem;
   align-items: flex-start;
+  justify-content: center;
 }
 
 .content-main {
@@ -174,7 +175,9 @@ a:hover {
 }
 
 .site-content {
-  padding: 2.5rem 0;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 2.5rem 1.25rem;
 }
 
 .post-item {
@@ -182,12 +185,24 @@ a:hover {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
-  margin-bottom: 1.5rem;
-  transition: box-shadow 0.2s;
+  transition: box-shadow 0.2s, transform 0.2s;
+  display: flex; flex-direction: column;
 }
 
 .post-item:hover {
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+  transform: translateY(-3px);
+}
+
+/* 文章卡片网格（3 列） */
+.article-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+  gap: 1.25rem;
+}
+
+.article-grid .post-item {
+  margin-bottom: 0;
 }
 
 .post-title {

@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block title %}{{ SITENAME }}{% endblock %}
 {% block content %}
-<section class="article-list">
+<section class="article-grid">
   {% for article in articles_page.object_list %}
   <article class="post-item">
     <header>
@@ -13,10 +13,12 @@
         {% endif %}
       </div>
     </header>
+    {% if article.summary %}
     <div class="post-summary">
-      {{ article.summary }}
+      {{ article.summary | striptags | truncate(120) }}
     </div>
-    <a class="read-more" href="{{ SITEURL }}/{{ article.url }}">阅读全文 →</a>
+    {% endif %}
+    <a class="read-more" href="{{ SITEURL }}/{{ article.url }}" style="margin-top:auto;">阅读全文 →</a>
   </article>
   {% endfor %}
 </section>
