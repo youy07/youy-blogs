@@ -155,6 +155,8 @@ HTML = f'''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta content="全A中位指数，K线技术分析" name="description"/>
+<meta content="A股,K线，技术分析，MA,MACD,BOLL全指标" name="keywords"/>
 <title>全A指数 K线图</title>
 <script src="https://cdn.jsdelivr.net/npm/echarts@5/dist/echarts.min.js"></script>
 <style>
